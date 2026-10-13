@@ -1,464 +1,1089 @@
+/* ============================================================
+   GLOBAL SETTINGS
+   These settings apply throughout the entire website.
+   ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
-
-:root {
-  --pink: #ff73b9;
-  --gold: #ffd889;
-  --purple: #a98bff;
-  --text: #fff5ff;
-  --muted: #e5d6f5;
-  --glass: rgba(34, 19, 59, 0.78);
-}
-
+/* Makes sizing predictable by including padding within element widths. */
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
+/* Sets smooth scrolling when navigation links are clicked. */
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
+/* Sets the main page background, text colour, and default font. */
 body {
-  margin: 0;
-  min-height: 100vh;
-  color: var(--text);
-  font-family: "Poppins", sans-serif;
-  background:
-    linear-gradient(135deg, rgba(15, 8, 39, .91), rgba(64, 13, 63, .82)),
-    url("https://raw.githubusercontent.com/mubarakshahith2008-arch/For_ammu_/main/Image/file_00000000f3f47208bfd42682f109e520.png")
-    center / cover fixed;
-  overflow-x: hidden;
+    margin: 0;
+    min-height: 100vh;
+    color: #fff7fb;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    background: #17112d;
+    overflow-x: hidden;
 }
 
-button {
-  font: inherit;
-  cursor: pointer;
+/* Stops a hidden screen from accidentally becoming visible. */
+[hidden] {
+    display: none !important;
 }
 
+/* Removes the default underline from links. */
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Makes buttons and form controls inherit the website's font. */
+button,
+input {
+    font: inherit;
+}
+
+/* Adds an accessible focus outline for keyboard users. */
 button:focus-visible,
-a:focus-visible {
-  outline: 3px solid var(--gold);
-  outline-offset: 4px;
+a:focus-visible,
+input:focus-visible {
+    outline: 3px solid #ffe39d;
+    outline-offset: 4px;
 }
 
-#stars {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  pointer-events: none;
+/* Creates a blurred wallpaper layer behind the website. */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    pointer-events: none;
+
+    /*
+       Replace this URL with url("images/wallpaper.png")
+       if you want to keep your wallpaper file locally.
+       The GitHub URL below refers to the wallpaper you supplied.
+    */
+    background-image:
+        linear-gradient(
+            135deg,
+            rgba(27, 12, 54, 0.91),
+            rgba(77, 24, 78, 0.79),
+            rgba(17, 18, 51, 0.93)
+        ),
+        url("https://raw.githubusercontent.com/mubarakshahith2008-arch/For_ammu_/main/Image/file_00000000f3f47208bfd42682f109e520.png");
+
+    background-position: center;
+    background-size: cover;
+    filter: saturate(1.12);
 }
 
-#hearts {
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 5;
+/* Adds a subtle layer of light over the background. */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(255, 117, 198, 0.15),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(255, 209, 125, 0.12),
+            transparent 30%
+        );
 }
 
-.topbar {
-  position: relative;
-  z-index: 10;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 18px clamp(16px, 5vw, 60px);
-  background: rgba(12, 6, 29, .5);
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
-  backdrop-filter: blur(14px);
+/* Defines shared theme colours for easy editing. */
+:root {
+    --pink: #ff8ac6;
+    --soft-pink: #ffd4eb;
+    --purple: #b8a1ff;
+    --gold: #ffdf9a;
+    --white: #fff7fb;
+    --muted: #e9dbee;
+    --glass: rgba(255, 255, 255, 0.09);
+    --glass-border: rgba(255, 255, 255, 0.19);
 }
 
-.brand {
-  color: var(--gold);
-  font-weight: 700;
-  text-decoration: none;
-  letter-spacing: 1px;
+/* ============================================================
+   SCREEN TRANSITIONS
+   Welcome, password, and main site fade into view.
+   ============================================================ */
+
+/* Every major screen fills the browser window. */
+.screen {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(14px);
+
+    transition:
+        opacity 0.45s ease,
+        transform 0.45s ease,
+        visibility 0.45s ease;
 }
 
-.music-btn {
-  padding: 10px 16px;
-  color: white;
-  background: rgba(255, 255, 255, .1);
-  border: 1px solid rgba(255, 255, 255, .25);
-  border-radius: 30px;
+/* Only the active screen receives clicks and becomes visible. */
+.screen.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
 }
 
-main {
-  width: min(1100px, 100%);
-  margin: auto;
-  padding: 24px 18px 120px;
+/* Welcome and password screens receive soft colour gradients. */
+.welcome-screen,
+.password-screen {
+    padding: 24px;
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(255, 122, 191, 0.18),
+            transparent 34%
+        ),
+        radial-gradient(
+            circle at 80% 80%,
+            rgba(186, 147, 255, 0.2),
+            transparent 36%
+        );
 }
 
-.scene {
-  display: none;
-  min-height: 72vh;
-  align-items: center;
-  justify-content: center;
-  animation: appear .65s ease both;
+/* The main site is aligned from the top so it can scroll normally. */
+.site-screen {
+    justify-content: flex-start;
+    align-items: stretch;
+    background: transparent;
 }
 
-.scene.active {
-  display: flex;
+/* ============================================================
+   BUTTONS
+   Shared design for all main call-to-action buttons.
+   ============================================================ */
+
+/* Styles the main action button. */
+.primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 48px;
+    padding: 13px 24px;
+
+    border: 1px solid rgba(255, 255, 255, 0.42);
+    border-radius: 999px;
+
+    color: #35142f;
+    font-weight: 800;
+    text-align: center;
+
+    background: linear-gradient(
+        115deg,
+        #ffabd7,
+        #ffe3ae,
+        #d9c4ff
+    );
+
+    box-shadow:
+        0 8px 28px rgba(255, 128, 196, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
-.hero-card,
-.glass-card {
-  width: min(760px, 100%);
-  padding: clamp(24px, 5vw, 50px);
-  text-align: center;
-  background: var(--glass);
-  border: 1px solid rgba(255, 255, 255, .2);
-  border-radius: 30px;
-  box-shadow: 0 20px 70px rgba(0, 0, 0, .35);
-  backdrop-filter: blur(18px);
+/* Adds a gentle lift when a pointer hovers over a button. */
+.primary-button:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 13px 32px rgba(255, 128, 196, 0.32);
 }
 
-.hero-card {
-  background:
-    radial-gradient(circle at top, rgba(255, 115, 185, .19), transparent 55%),
-    var(--glass);
+/* Removes the normal link underline from button-style links. */
+.button-link {
+    text-decoration: none;
 }
 
-h1,
-h2,
-h3 {
-  font-family: "Cormorant Garamond", Georgia, serif;
-  line-height: 1.1;
+/* Styles small text-only buttons such as the back button. */
+.text-button {
+    display: block;
+    margin: 20px auto 0;
+    padding: 8px 12px;
+
+    border: 0;
+    color: var(--soft-pink);
+    background: transparent;
+
+    cursor: pointer;
 }
 
-h1 {
-  margin: 14px 0;
-  font-size: clamp(2.8rem, 8vw, 5.6rem);
+/* ============================================================
+   WELCOME SCREEN
+   Creates the animated opening experience.
+   ============================================================ */
+
+/* Limits the welcome content's width. */
+.welcome-card {
+    position: relative;
+    z-index: 2;
+    width: min(100%, 620px);
+    padding: 40px 26px;
+    text-align: center;
+
+    border: 1px solid var(--glass-border);
+    border-radius: 32px;
+
+    background: rgba(30, 17, 52, 0.52);
+    backdrop-filter: blur(16px);
+
+    box-shadow: 0 18px 70px rgba(9, 4, 25, 0.28);
+    animation: welcomeFloat 5s ease-in-out infinite;
 }
 
-h1 span {
-  color: var(--gold);
-  text-shadow: 0 0 28px rgba(255, 216, 137, .25);
-}
-
-h2 {
-  margin: 12px 0 20px;
-  color: #ffcae8;
-  font-size: clamp(2.1rem, 5vw, 3.5rem);
-}
-
-h3 {
-  color: var(--gold);
-  font-size: clamp(1.5rem, 4vw, 2.1rem);
-}
-
-p {
-  line-height: 1.85;
-}
-
-.lead {
-  max-width: 590px;
-  margin: 20px auto;
-  color: var(--muted);
-  font-size: clamp(1rem, 2.4vw, 1.2rem);
-}
-
+/* Adds letter spacing to the small section labels. */
 .eyebrow {
-  color: var(--gold);
-  font-size: .8rem;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
+    margin: 0 0 12px;
+    color: var(--gold);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
 }
 
-.date-pill {
-  display: inline-block;
-  margin: 10px 0 26px;
-  padding: 9px 16px;
-  color: #ffe3f4;
-  border: 1px solid rgba(255, 202, 232, .45);
-  border-radius: 30px;
+/* Styles the big welcome title. */
+.welcome-title {
+    margin: 12px 0;
+    font-size: clamp(2.7rem, 8vw, 5rem);
+    line-height: 1.06;
 }
 
-.primary,
-.secondary {
-  margin: 8px 5px;
-  padding: 13px 23px;
-  border-radius: 30px;
-  transition: transform .2s ease, box-shadow .2s ease;
+/* Colours the name with a pink-to-gold gradient. */
+.welcome-title span,
+.hero-title span {
+    color: transparent;
+    background: linear-gradient(90deg, #ffacd9, #ffe4a6);
+    background-clip: text;
+    -webkit-background-clip: text;
 }
 
-.primary {
-  color: #34152e;
-  font-weight: 700;
-  border: none;
-  background: linear-gradient(115deg, #ffd889, #ff91cc, #c2a1ff);
-  box-shadow: 0 8px 28px rgba(255, 115, 185, .23);
+/* Styles the supporting welcome sentence. */
+.welcome-subtitle {
+    margin: 18px auto;
+    max-width: 400px;
+    color: var(--muted);
+    line-height: 1.8;
 }
 
-.secondary {
-  color: white;
-  border: 1px solid rgba(255, 255, 255, .32);
-  background: rgba(255, 255, 255, .08);
+/* Makes the heart beat softly. */
+.welcome-heart {
+    margin: 22px 0;
+    color: #ff9cce;
+    font-size: 4rem;
+    animation: heartBeat 1.7s ease-in-out infinite;
 }
 
-.primary:hover,
-.secondary:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 10px 28px rgba(255, 115, 185, .22);
+/* Styles the hint below the welcome button. */
+.tiny-note {
+    margin: 18px 0 0;
+    color: #e9dbee;
+    font-size: 0.8rem;
 }
 
-.cute-gif {
-  display: block;
-  width: min(180px, 55%);
-  max-height: 190px;
-  object-fit: contain;
-  margin: 0 auto 18px;
+/* Positions a decorative star. */
+.star {
+    position: absolute;
+    color: var(--gold);
+    font-size: 1.8rem;
+    pointer-events: none;
+    animation: twinkle 2.5s ease-in-out infinite;
 }
 
-.story-gif {
-  display: block;
-  width: min(240px, 70%);
-  max-height: 220px;
-  object-fit: contain;
-  margin: 18px auto;
+/* Places each decorative star at a different location. */
+.star-one {
+    top: 14%;
+    left: 12%;
 }
 
-.gift-gif {
-  display: block;
-  width: min(230px, 75%);
-  max-height: 260px;
-  object-fit: contain;
-  margin: 20px auto;
-  border-radius: 20px;
+.star-two {
+    top: 20%;
+    right: 13%;
+    animation-delay: 0.5s;
 }
 
-.highlight {
-  color: var(--gold);
-  font-weight: 600;
+.star-three {
+    bottom: 15%;
+    left: 18%;
+    animation-delay: 1s;
 }
 
+.star-four {
+    right: 15%;
+    bottom: 19%;
+    animation-delay: 1.5s;
+}
+
+/* Each welcome element can softly enter the screen. */
+.reveal-on-load {
+    animation: fadeUp 1s both;
+}
+
+/* Staggers the heading and subtitle animations. */
+.welcome-title.reveal-on-load {
+    animation-delay: 0.15s;
+}
+
+.welcome-subtitle.reveal-on-load {
+    animation-delay: 0.3s;
+}
+
+/* ============================================================
+   PASSWORD SCREEN
+   Creates the romantic password card.
+   ============================================================ */
+
+/* Styles the card holding the password form. */
+.password-card {
+    width: min(100%, 460px);
+    padding: 34px 26px;
+
+    text-align: center;
+
+    border: 1px solid var(--glass-border);
+    border-radius: 28px;
+
+    background: rgba(24, 16, 48, 0.83);
+    backdrop-filter: blur(18px);
+
+    box-shadow: 0 20px 70px rgba(5, 2, 18, 0.3);
+}
+
+/* Makes the lock symbol noticeable. */
+.lock-symbol {
+    margin-bottom: 12px;
+    font-size: 3.2rem;
+    animation: heartBeat 2s infinite;
+}
+
+/* Styles headings in the password and main sections. */
+.password-card h1 {
+    margin: 10px 0;
+    font-size: clamp(1.9rem, 6vw, 2.5rem);
+}
+
+/* Styles supporting descriptions. */
+.section-description {
+    max-width: 560px;
+    margin: 12px auto 22px;
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+/* Aligns the password form items vertically. */
+#passwordForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 22px;
+    text-align: left;
+}
+
+/* Styles the label above the password input. */
+#passwordForm label {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+/* Styles the password entry field. */
+#passwordInput {
+    width: 100%;
+    min-height: 48px;
+    padding: 13px 15px;
+
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 14px;
+
+    color: white;
+    background: rgba(255, 255, 255, 0.09);
+}
+
+/* Keeps the placeholder easy to read on the dark background. */
+#passwordInput::placeholder {
+    color: #d7c6df;
+}
+
+/* Styles messages shown below the password form. */
+.feedback-message {
+    min-height: 1.4em;
+    color: var(--soft-pink);
+    font-size: 0.9rem;
+}
+
+/* ============================================================
+   MAIN SITE NAVIGATION
+   ============================================================ */
+
+/* Creates the translucent header above the site. */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 8;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+
+    padding: 17px clamp(16px, 5vw, 70px);
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+
+    background: rgba(20, 12, 42, 0.76);
+    backdrop-filter: blur(18px);
+}
+
+/* Styles the small brand in the header. */
+.site-logo {
+    color: white;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+/* Makes the logo's heart pink. */
+.site-logo span {
+    color: var(--pink);
+}
+
+/* Arranges navigation links in a row. */
+.site-navigation {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+/* Styles navigation links. */
+.site-navigation a {
+    color: var(--muted);
+    font-size: 0.88rem;
+    transition: color 0.2s ease;
+}
+
+/* Highlights a link while hovering. */
+.site-navigation a:hover {
+    color: var(--gold);
+}
+
+/* ============================================================
+   SHARED SECTION LAYOUT
+   ============================================================ */
+
+/* Adds consistent space around every main section. */
+.section-padding {
+    padding: clamp(60px, 9vw, 110px) clamp(18px, 6vw, 80px);
+}
+
+/* Keeps section content centred and readable. */
+.content-section {
+    width: 100%;
+    max-width: 1250px;
+    margin: 0 auto;
+}
+
+/* Centres the heading at the start of a section. */
 .section-heading {
-  margin-bottom: 24px;
-  text-align: center;
+    margin: 0 auto 36px;
+    text-align: center;
 }
 
-.section-heading h2 {
-  margin-bottom: 8px;
+/* Styles the section titles. */
+.section-heading h2,
+.letter-card h2,
+.finale-card h2 {
+    margin: 0;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    line-height: 1.2;
 }
 
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-  width: 100%;
+/* Gives glass-style cards a shared appearance. */
+.glass-card {
+    border: 1px solid var(--glass-border);
+    border-radius: 26px;
+
+    background: var(--glass);
+    backdrop-filter: blur(14px);
+
+    box-shadow: 0 16px 42px rgba(9, 3, 25, 0.18);
 }
 
-.photo-card {
-  min-width: 0;
-  padding: 8px;
-  color: white;
-  background: rgba(255, 255, 255, .09);
-  border: 1px solid rgba(255, 255, 255, .18);
-  border-radius: 19px;
-  transition: transform .25s ease;
-}
+/* ============================================================
+   MAIN HERO
+   ============================================================ */
 
-.photo-card:hover {
-  transform: translateY(-5px) rotate(-1deg);
-}
+/* Centres the first section after password unlock. */
+.hero {
+    position: relative;
+    display: grid;
+    place-items: center;
 
-.photo-card img {
-  display: block;
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  border-radius: 13px;
-  background: rgba(255, 255, 255, .08);
-}
-
-.photo-card span {
-  display: block;
-  padding: 12px 3px 5px;
-  font-size: .85rem;
-}
-
-.small-note {
-  text-align: center;
-  color: var(--muted);
-}
-
-.letter-text {
-  margin: 24px 0;
-  color: #fff0fa;
-  line-height: 2;
-  white-space: pre-line;
-}
-
-.button-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-}
-
-#proposalReply {
-  min-height: 28px;
-  color: var(--gold);
-  font-weight: 600;
-}
-
-.bottom-heart {
-  position: fixed;
-  right: 16px;
-  bottom: 18px;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 13px 8px 8px;
-  background: rgba(23, 10, 42, .9);
-  border: 1px solid rgba(255, 150, 208, .45);
-  border-radius: 40px;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, .3);
-  backdrop-filter: blur(12px);
-}
-
-#heartBtn {
-  width: 43px;
-  height: 43px;
-  color: #ff85c5;
-  font-size: 1.7rem;
-  border: none;
-  border-radius: 50%;
-  background: rgba(255, 105, 180, .16);
-}
-
-#heartBtn.liked {
-  color: white;
-  background: #f04c9c;
-  animation: heartbeat .5s ease;
-}
-
-#heartLabel {
-  font-size: .76rem;
-  color: #ffe1f3;
-}
-
-footer {
-  padding: 25px 15px;
-  text-align: center;
-  color: #d8c6e7;
-  font-size: .8rem;
-}
-
-dialog {
-  width: min(92vw, 700px);
-  max-height: 90vh;
-  padding: 15px;
-  color: white;
-  text-align: center;
-  background: #1d1031;
-  border: 1px solid rgba(255, 216, 137, .5);
-  border-radius: 22px;
-}
-
-dialog::backdrop {
-  background: rgba(5, 2, 14, .86);
-  backdrop-filter: blur(5px);
-}
-
-#largePhoto {
-  display: block;
-  max-width: 100%;
-  max-height: 72vh;
-  margin: 25px auto 5px;
-  border-radius: 13px;
-}
-
-.close-btn {
-  float: right;
-  color: white;
-  border: none;
-  background: transparent;
-  font-size: 1.4rem;
-}
-
-.floating-heart {
-  position: absolute;
-  bottom: -40px;
-  color: #ff8ac7;
-  animation: floatUp linear forwards;
-  filter: drop-shadow(0 0 8px rgba(255, 110, 190, .55));
-}
-
-@keyframes appear {
-  from { opacity: 0; transform: translateY(18px) scale(.98); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-@keyframes floatUp {
-  to { transform: translateY(-110vh) rotate(35deg); opacity: 0; }
-}
-
-@keyframes heartbeat {
-  50% { transform: scale(1.3); }
-}
-
-@media (max-width: 700px) {
-  main {
-    padding: 16px 12px 110px;
-  }
-
-  .scene {
     min-height: 75vh;
-  }
+    overflow: hidden;
+    text-align: center;
+}
 
-  .gallery {
+/* Keeps hero copy above the decorative circles. */
+.hero-content {
+    position: relative;
+    z-index: 2;
+    width: min(100%, 780px);
+}
+
+/* Styles the main birthday headline. */
+.hero-title {
+    margin: 12px 0 18px;
+    font-size: clamp(3rem, 9vw, 6.3rem);
+    line-height: 1.03;
+}
+
+/* Styles the subtitle below the hero headline. */
+.hero-subtitle {
+    max-width: 540px;
+    margin: 0 auto 28px;
+    color: var(--muted);
+    line-height: 1.9;
+    font-size: 1.05rem;
+}
+
+/* Adds a small animated group of hearts below the hero content. */
+.hero-decoration {
+    position: relative;
+    z-index: 2;
+    margin-top: 35px;
+    font-size: 1.65rem;
+    animation: welcomeFloat 4s ease-in-out infinite;
+}
+
+/* Draws the soft glowing circle decorations. */
+.glow-orb {
+    position: absolute;
+    width: 230px;
+    height: 230px;
+    border-radius: 50%;
+    filter: blur(55px);
+    pointer-events: none;
+}
+
+/* Makes the first glow pink. */
+.orb-one {
+    top: 12%;
+    left: 8%;
+    background: rgba(255, 94, 179, 0.24);
+}
+
+/* Makes the second glow purple. */
+.orb-two {
+    right: 8%;
+    bottom: 10%;
+    background: rgba(161, 126, 255, 0.23);
+}
+
+/* ============================================================
+   SPECIAL DATE CARDS
+   ============================================================ */
+
+/* Creates two responsive columns for the dates. */
+.date-grid {
+    display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-
-  .photo-card img {
-    height: 190px;
-  }
-
-  .hero-card,
-  .glass-card {
-    padding: 25px 17px;
-    border-radius: 23px;
-  }
-
-  .bottom-heart {
-    right: 10px;
-    bottom: 10px;
-  }
-
-  #heartLabel {
-    font-size: .69rem;
-  }
+    gap: 22px;
 }
 
-@media (max-width: 380px) {
-  .photo-card img {
-    height: 150px;
-  }
-
-  .brand {
-    font-size: .9rem;
-  }
-
-  .music-btn {
-    padding: 9px 11px;
-    font-size: .8rem;
-  }
+/* Styles each special-date card. */
+.date-card {
+    padding: 28px;
+    text-align: center;
+    transition: transform 0.3s ease;
 }
 
+/* Makes cards rise slightly on hover. */
+.date-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Styles each card's decorative symbol. */
+.date-icon {
+    margin-bottom: 14px;
+    font-size: 2.6rem;
+}
+
+/* Emphasises the date itself. */
+.date-number {
+    color: var(--gold);
+    font-size: 0.88rem;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+}
+
+/* Styles the small heading in a date card. */
+.date-card h3 {
+    margin: 13px 0;
+    font-size: 1.35rem;
+}
+
+/* Keeps card paragraphs readable. */
+.date-card p {
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+/* Makes placeholder content visibly editable. */
+.editable-hint {
+    padding: 12px;
+    border: 1px dashed rgba(255, 255, 255, 0.23);
+    border-radius: 12px;
+    font-size: 0.85rem;
+}
+
+/* ============================================================
+   OPTIONAL GIF AND STICKER GRID
+   ============================================================ */
+
+/* Centres the cute sticker section. */
+.sticker-section {
+    text-align: center;
+}
+
+/* Arranges available stickers into a flexible grid. */
+.sticker-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+}
+
+/* Controls the sticker dimensions without stretching the images. */
+.sticker {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    animation: welcomeFloat 4s ease-in-out infinite;
+}
+
+/* Alternates the sticker timing so they do not all move in sync. */
+.sticker:nth-child(even) {
+    animation-delay: -2s;
+}
+
+/* ============================================================
+   PHOTO PLACEHOLDERS
+   ============================================================ */
+
+/* Shows the photo spaces in three columns on larger screens. */
+.photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+/* Creates a fixed-ratio frame for each photo. */
+.photo-frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 177, 218, 0.12),
+            rgba(184, 161, 255, 0.12)
+        ),
+        rgba(255, 255, 255, 0.04);
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease;
+}
+
+/* Gives the photo frame a slight lift on hover. */
+.photo-frame:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 223, 154, 0.65);
+}
+
+/* Holds an actual photo once one is available. */
+.photo-image {
+    display: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Shows the image only when JavaScript detects a loaded photo. */
+.photo-frame.has-photo .photo-image {
+    display: block;
+}
+
+/* Styles the placeholder shown when there is no photo yet. */
+.photo-placeholder {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 15px;
+    text-align: center;
+}
+
+/* Hides the empty placeholder when an actual photo loads. */
+.photo-frame.has-photo .photo-placeholder {
+    display: none;
+}
+
+/* The placeholder's heart symbol. */
+.photo-placeholder-icon {
+    margin-bottom: 12px;
+    color: var(--soft-pink);
+    font-size: 2.4rem;
+    animation: heartBeat 2s infinite;
+}
+
+/* The photo number. */
+.photo-placeholder-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+/* Explains which file should replace the placeholder. */
+.photo-placeholder-filename {
+    margin: 10px 0 0;
+    color: var(--muted);
+    font-size: 0.72rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* ============================================================
+   PERSONAL LETTER
+   ============================================================ */
+
+/* Centres and limits the personal letter card. */
+.letter-card {
+    width: min(100%, 780px);
+    margin: 0 auto;
+    padding: clamp(26px, 5vw, 55px);
+    text-align: center;
+}
+
+/* Makes the envelope icon prominent. */
+.letter-icon {
+    margin-bottom: 12px;
+    font-size: 3rem;
+}
+
+/* Provides generous space for a personal message. */
+.editable-message {
+    margin: 22px auto;
+    max-width: 680px;
+    color: #fff0fa;
+    line-height: 2;
+    white-space: pre-line;
+}
+
+/* Styles the sign-off at the end of the letter. */
+.signature {
+    margin-top: 26px;
+    color: var(--gold);
+    font-weight: 800;
+}
+
+/* ============================================================
+   BIRTHDAY FINALE
+   ============================================================ */
+
+/* Gives the final birthday section a separate festive background. */
+.birthday-finale {
+    display: grid;
+    place-items: center;
+    min-height: 80vh;
+    text-align: center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(255, 137, 198, 0.15),
+            transparent 65%
+        );
+}
+
+/* Styles the final birthday card. */
+.finale-card {
+    width: min(100%, 820px);
+    padding: clamp(28px, 6vw, 64px);
+
+    border: 1px solid var(--glass-border);
+    border-radius: 32px;
+
+    background: rgba(31, 17, 53, 0.64);
+    backdrop-filter: blur(15px);
+
+    box-shadow: 0 20px 65px rgba(7, 3, 19, 0.22);
+}
+
+/* Animates the cake illustration. */
+.cake-illustration {
+    margin: 12px 0 20px;
+    font-size: clamp(4rem, 12vw, 6rem);
+    animation: welcomeFloat 4s ease-in-out infinite;
+}
+
+/* Styles the requested ammu_143 signature. */
+.heart-signature {
+    margin-top: 28px;
+    color: var(--pink);
+    font-weight: 900;
+    letter-spacing: 0.15em;
+}
+
+/* ============================================================
+   MUSIC CONTROLS AND FOOTER
+   ============================================================ */
+
+/* Centres the footer. */
+.site-footer {
+    padding: 24px;
+    color: var(--muted);
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+/* Keeps the music buttons visible during scrolling. */
+.music-controls {
+    position: fixed;
+    right: 15px;
+    bottom: 15px;
+    z-index: 9;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* Styles both music control buttons. */
+.music-controls button {
+    padding: 11px 14px;
+
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    border-radius: 999px;
+
+    color: white;
+    background: rgba(33, 20, 56, 0.88);
+    backdrop-filter: blur(12px);
+
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+/* Highlights music controls when hovered. */
+.music-controls button:hover {
+    border-color: var(--gold);
+}
+
+/* ============================================================
+   REVEAL ANIMATIONS
+   Sections fade and slide into view as the visitor scrolls.
+   ============================================================ */
+
+/* Elements begin slightly lower and transparent. */
+[data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+
+    transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+}
+
+/* JavaScript adds this class when an element becomes visible. */
+[data-reveal].revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ============================================================
+   FLOATING HEARTS
+   JavaScript positions these hearts across the screen.
+   ============================================================ */
+
+/* Creates each temporary floating heart. */
+.floating-heart {
+    position: fixed;
+    z-index: 30;
+    bottom: -30px;
+
+    pointer-events: none;
+    color: #ffacd9;
+    font-size: var(--heart-size, 24px);
+
+    animation: floatHeart var(--heart-duration, 4s) ease-out forwards;
+}
+
+/* ============================================================
+   KEYFRAMES
+   Define how the decorative elements move.
+   ============================================================ */
+
+/* Gently moves a decorative item up and down. */
+@keyframes welcomeFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-9px);
+    }
+}
+
+/* Makes a heart grow and shrink. */
+@keyframes heartBeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+}
+
+/* Makes stars softly change opacity and size. */
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 0.45;
+        transform: scale(0.85) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2) rotate(15deg);
+    }
+}
+
+/* Makes content enter by fading in and moving upward. */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Sends a heart upwards while fading it away. */
+@keyframes floatHeart {
+    0% {
+        opacity: 0;
+        transform: translateY(0) rotate(0deg) scale(0.6);
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-110vh) rotate(35deg) scale(1.3);
+    }
+}
+
+/* ============================================================
+   MOBILE LAYOUT
+   Adjusts the design for narrow screens.
+   ============================================================ */
+
+/* Applies these rules on smaller screens. */
+@media (max-width: 700px) {
+
+    /* Moves the header items to a vertical layout. */
+    .site-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    /* Lets the navigation fit small screens. */
+    .site-navigation {
+        gap: 12px;
+    }
+
+    /* Uses smaller navigation text on mobile. */
+    .site-navigation a {
+        font-size: 0.78rem;
+    }
+
+    /* Stacks the two date cards vertically. */
+    .date-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Uses two columns for photo spaces on mobile. */
+    .photo-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    /* Shrinks the photo caption when space is limited. */
+    .photo-placeholder-filename {
+        font-size: 0.65rem;
+    }
+
+    /* Leaves room for the music controls. */
+    .music-controls {
+        right: 8px;
+        bottom: 8px;
+        left: 8px;
+        justify-content: center;
+    }
+
+    /* Shrinks each music button slightly. */
+    .music-controls button {
+        padding: 10px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+/* Reduces motion for people who prefer fewer animations. */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    animation-duration: .01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: .01ms !important;
-  }
+
+    /* Turns off long decorative movement. */
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }
