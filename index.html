@@ -1,560 +1,164 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#fff0f5">
-  <meta name="description" content="A special birthday surprise for Ammu.">
-  <title>For Ammu ❤️ | A Special Birthday</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+  <meta name="theme-color" content="#160b2b">
+  <title>For Ammu ❤️</title>
   <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
 </head>
-
 <body>
-  <!-- SECRET PASSWORD SCREEN -->
-  <div id="siteLock" class="site-lock">
-    <div class="lock-card">
-      <div class="lock-heart" aria-hidden="true">♡</div>
-      <span class="eyebrow">A little surprise for someone special</span>
-      <h1>For <span>Ammu</span> ❤️</h1>
-      <p>This little world is just for you.</p>
+  <canvas id="stars"></canvas>
+  <div id="hearts"></div>
 
-      <form id="unlockForm">
-        <label for="unlockPassword">Enter your secret password</label>
-        <input
-          id="unlockPassword"
-          type="password"
-          placeholder="Your secret password"
-          autocomplete="off"
-          required
-        >
-        <button class="primary-button" type="submit">
-          Unlock My Surprise ♡
-        </button>
-        <p id="lockError" class="lock-error" role="alert"></p>
-      </form>
-    </div>
-  </div>
-
-  <!-- Decorative backgrounds -->
-  <div class="background-glow" aria-hidden="true"></div>
-  <div id="hearts-container" aria-hidden="true"></div>
-  <div id="petals-container" aria-hidden="true"></div>
-  <div id="sparkles-container" aria-hidden="true"></div>
-
-  <!-- Progress -->
-  <div class="progress-track" aria-label="Birthday story progress">
-    <div id="progressBar"></div>
-  </div>
-
-  <!-- Music -->
-  <audio id="birthdaySong" loop preload="none">
-    <source src="music/Song.mp3" type="audio/mpeg">
-  </audio>
-
-  <button
-    id="musicButton"
-    class="music-button"
-    type="button"
-    aria-label="Play birthday music"
-    aria-pressed="false"
-  >
-    ♫ <span id="musicLabel">Play Music</span>
-    <span id="musicHeart" aria-hidden="true">♡</span>
-  </button>
-
-  <main class="story">
-
-    <!-- SCENE 1 -->
-    <section class="scene active" id="scene1">
-      <div class="content">
-        <span class="eyebrow">A little surprise made with love</span>
-        <div class="heart-badge" aria-hidden="true">♡</div>
-
-        <h1 class="hero-title">My <span>Ammu</span></h1>
-
-        <p class="subtitle">
-          Today is all about you, your smile, and the beautiful memories
-          we are creating together.
-        </p>
-
-        <div class="divider">♡ · ♡ · ♡</div>
-
-        <p class="small-note">I made something special for you...</p>
-
-        <button class="primary-button" type="button" data-next="2">
-          Open Your Surprise <span>♡</span>
-        </button>
-      </div>
-    </section>
-
-    <!-- SCENE 2 -->
-    <section class="scene" id="scene2">
-      <img class="page-sticker sticker-top-right"
-           src="unyel.gif" alt="" aria-hidden="true">
-
-      <div class="content">
-        <span class="eyebrow">Every story starts somewhere</span>
-        <h2>Where It <span>All Began</span></h2>
-
-        <article class="message-card">
-          <div class="card-icon">💌</div>
-          <p>
-            It all started on Telegram. A simple conversation about
-            dubbing slowly became something precious.
-          </p>
-          <p>
-            Little by little, we got to know each other, built trust,
-            and created a connection that became special to me.
-          </p>
-        </article>
-
-        <p class="highlight-text">
-          Sometimes, the smallest beginning leads to the sweetest story.
-        </p>
-
-        <button class="primary-button" type="button" data-next="3">
-          Continue Our Story →
-        </button>
-      </div>
-    </section>
-
-    <!-- SCENE 3 -->
-    <section class="scene" id="scene3">
-      <div class="content">
-        <span class="eyebrow">A date I'll always remember</span>
-
-        <div class="calendar-card">
-          <span class="calendar-month">JUNE</span>
-          <strong class="calendar-day">22</strong>
-          <span class="calendar-year">2025</span>
-        </div>
-
-        <h2>A Day That Became <span>Special</span></h2>
-
-        <p class="subtitle">
-          June 22, 2025 — a beautiful date in our story and a memory
-          that will always have a place in my heart.
-        </p>
-
-        <button class="primary-button" type="button" data-next="4">
-          The Memory Continues →
-        </button>
-      </div>
-    </section>
-
-    <!-- SCENE 4 -->
-    <section class="scene" id="scene4">
-      <img class="page-sticker sticker-top-left"
-           src="BearBounce.gif" alt="" aria-hidden="true">
-
-      <div class="content">
-        <span class="eyebrow">One of my favourite memories</span>
-        <h2>The First <span>Time We Met</span></h2>
-
-        <figure class="photo-frame featured-photo">
-          <img src="images/first-meet.jpg"
-               alt="Our first meeting memory"
-               class="memory-photo" loading="lazy">
-          <figcaption>
-            A memory I'll always keep close to my heart ♡
-          </figcaption>
-        </figure>
-
-        <p class="subtitle">
-          Seeing you in person for the first time became one of those
-          moments I never want to forget.
-        </p>
-
-        <button class="primary-button" type="button" data-next="5">
-          Next Memory →
-        </button>
-      </div>
-    </section>
-
-    <!-- SCENE 5 -->
-    <section class="scene" id="scene5">
-      <div class="content">
-        <span class="eyebrow">There's a reason you're special</span>
-        <h2>Why You're <span>My Ammu</span></h2>
-
-        <article class="message-card">
-          <div class="card-icon">🌷</div>
-          <p>
-            You trusted me, stood by me, and faced things for me.
-            Those things mean more to me than I can explain.
-          </p>
-          <p>
-            It's not just about the happy moments. It's also about
-            the trust, understanding, and care we share.
-          </p>
-        </article>
-
-        <div class="love-tags">
-          <span>Trust</span>
-          <span>Care</span>
-          <span>Memories</span>
-          <span>Us ♡</span>
-        </div>
-
-        <button class="primary-button" type="button" data-next="6">
-          One More Thing →
-        </button>
-      </div>
-    </section>
-
-    <!-- SCENE 6 -->
-    <section class="scene" id="scene6">
-      <img class="page-sticker sticker-bottom-left"
-           src="Bubu3.gif" alt="" aria-hidden="true">
-
-      <div class="content">
-        <span class="eyebrow">Even when we're far apart</span>
-        <h2>Distance Can't Change <span>Everything</span></h2>
-
-        <div class="distance-illustration" aria-hidden="true">
-          <span>♡</span>
-          <span class="dotted-line">··········</span>
-          <span>♡</span>
-        </div>
-
-        <article class="message-card">
-          <p>
-            Long distance isn't always easy. Sometimes I wish I could
-            be beside you, especially when you're having a difficult day.
-          </p>
-          <p>
-            I wish I could comfort you in person, listen to you, and
-            remind you that you don't have to face every difficult
-            moment alone.
-          </p>
-        </article>
-
-        <p class="highlight-text">
-          Until then, I'll keep caring from wherever I am. ♡
-        </p>
-
-        <button class="primary-button" type="button" data-next="7">
-          Our Future →
-        </button>
-      </div>
-    </section>
-
-    <!-- SCENE 7 -->
-    <section class="scene" id="scene7">
-      <img class="page-sticker sticker-top-left"
-           src="bearcuddle.gif" alt="" aria-hidden="true">
-
-      <div class="content">
-        <span class="eyebrow">A little dream for the future</span>
-        <h2>My Promise <span>To You</span></h2>
-
-        <article class="promise-card">
-          <div class="promise-icon">🌸</div>
-          <p>
-            I hope we get to build a peaceful future together, filled
-            with care, understanding, and everyday happiness.
-          </p>
-          <p>
-            I dream of the simple things too — being there for each
-            other, sharing daily hugs, supporting each other through
-            hard times, and making more beautiful memories.
-          </p>
-          <p class="promise-ending">
-            One day at a time, with love and care. ♡
-          </p>
-        </article>
-
-<!-- PROPOSAL INTERACTION -->
-<article class="proposal-card">
-  <div class="proposal-heart" aria-hidden="true">💗</div>
-
-  <span class="eyebrow">One little question for you</span>
-  <h2>Will You Say <span>Yes?</span></h2>
-
-  <p class="subtitle">
-    Ammu, shall we keep creating beautiful memories together? ♡
-  </p>
-
-  <div class="proposal-actions" id="proposalActions">
-    <button
-      id="proposalYes"
-      class="primary-button proposal-yes"
-      type="button"
-    >
-      Yes! 💗
+  <header class="topbar">
+    <a class="brand" href="#" id="brand">❤️ ammu_143</a>
+    <button id="musicBtn" class="music-btn" aria-label="Play or mute music">
+      🎵 Play music
     </button>
+  </header>
 
-    <button
-      id="proposalNo"
-      class="secondary-button proposal-no"
-      type="button"
-    >
-      No 🙈
-    </button>
-  </div>
+  <audio id="song" src="song.mpeg" loop preload="metadata"></audio>
 
-  <p
-    id="proposalSuccess"
-    class="proposal-success"
-    role="status"
-    aria-live="polite"
-    hidden
-  >
-    Aww! 💗 Here's to more beautiful memories together, Ammu! ✨
-  </p>
-</article>
-
-        <button class="primary-button" type="button" data-next="8">
-          Our Little Gallery →
-        </button>
+  <main>
+    <section class="scene active" id="welcome">
+      <div class="hero-card">
+        <img class="cute-gif" src="Image/Bubu3.gif" alt="Cute animated bears">
+        <p class="eyebrow">A little universe made for you ✨</p>
+        <h1>For my <span>Ammu</span> ❤️</h1>
+        <p class="lead">
+          Among all the stars in this universe, you will always be my favourite.
+        </p>
+        <div class="date-pill">Our little story · October 31</div>
+        <button class="primary" data-next="story">Open my heart 💌</button>
       </div>
     </section>
 
-    <!-- SCENE 8 -->
-    <section class="scene" id="scene8">
-      <div class="content wide-content">
-        <span class="eyebrow">Little moments, precious memories</span>
-        <h2>Our Memory <span>Gallery</span></h2>
-        <p class="subtitle">Tap any photo to see it more clearly. ♡</p>
-
-        <div class="gallery">
-          <figure class="photo-frame gallery-frame">
-            <img src="images/memory-1.jpg"
-                 alt="Memory one"
-                 class="memory-photo" loading="lazy">
-            <figcaption>Memory No. 1 ♡</figcaption>
-          </figure>
-
-          <figure class="photo-frame gallery-frame">
-            <img src="images/memory-2.jpg"
-                 alt="Memory two"
-                 class="memory-photo" loading="lazy">
-            <figcaption>Memory No. 2 ♡</figcaption>
-          </figure>
-
-          <figure class="photo-frame gallery-frame">
-            <img src="images/memory-3.jpg"
-                 alt="Memory three"
-                 class="memory-photo" loading="lazy">
-            <figcaption>Memory No. 3 ♡</figcaption>
-          </figure>
-        </div>
-
-        <button class="primary-button" type="button" data-next="9">
-          A Letter For You →
-        </button>
-      </div>
+    <section class="scene" id="story">
+      <article class="glass-card">
+        <p class="eyebrow">Chapter 01 · Where it began</p>
+        <h2>Instagram Strangers ✨</h2>
+        <p>
+          We started as strangers, but little by little, you became someone
+          incredibly special to me. Sometimes the most beautiful stories
+          begin in the most unexpected ways.
+        </p>
+        <img class="story-gif" src="Image/BearBounce.gif" alt="Bouncing bear">
+        <p class="highlight">And somehow, my heart found you. ❤️</p>
+        <button class="primary" data-next="memories">Our memories →</button>
+      </article>
     </section>
 
-<!-- SCENE 9: PREMIUM LOVE LETTER -->
-<section class="scene" id="scene9">
-  <img
-    class="page-sticker sticker-bottom-right"
-    src="DanceDance.gif"
-    alt=""
-    aria-hidden="true"
-  >
-
-  <div class="content letter-scene-content">
-    <span class="eyebrow">From my heart to yours</span>
-
-    <h2>A Little <span>Love Letter</span></h2>
-
-    <p class="subtitle">
-      A little message, written just for you. ♡
-    </p>
-
-    <!-- CLOSED ENVELOPE -->
-    <div class="love-envelope-wrap" id="loveEnvelopeWrap">
-      <button
-        class="love-envelope"
-        id="openLoveLetter"
-        type="button"
-        aria-label="Open your love letter"
-        aria-expanded="false"
-        aria-controls="loveLetterPaper"
-      >
-        <span class="envelope-back"></span>
-
-        <span class="envelope-letter-preview">
-          <span>For My Ammu</span>
-          <span>With Love ♡</span>
-        </span>
-
-        <span class="envelope-flap"></span>
-        <span class="envelope-front"></span>
-
-        <span class="envelope-seal" aria-hidden="true">♥</span>
-      </button>
-
-      <p class="envelope-hint" id="envelopeHint">
-        Tap the heart to open your letter ♡
-      </p>
-    </div>
-
-    <!-- LETTER PAPER -->
-    <article
-      class="letter-paper"
-      id="loveLetterPaper"
-      aria-hidden="true"
-      hidden
-      inert
-    >
-      <div class="letter-paper-inner">
-        <div class="letter-top-decoration" aria-hidden="true">
-          ✦ &nbsp; ♡ &nbsp; ✦
-        </div>
-
-        <p class="letter-greeting letter-line">My Ammu, 💗</p>
-
-        <p class="typewriter-text letter-line">
-          No matter how many memories we make, there will always be
-          more things I want to tell you and more moments I hope
-          we get to share.
-        </p>
-
-        <p class="typewriter-text letter-line">
-          Thank you for being part of my story. I hope we continue
-          learning, growing, laughing, and caring for each other.
-        </p>
-
-        <p class="letter-signature letter-line">
-          Yours, <span>Idiot</span> ♡
-        </p>
-
-        <div class="letter-bottom-decoration">
-          Made with love, just for you ♡
-        </div>
+    <section class="scene" id="memories">
+      <div class="section-heading">
+        <p class="eyebrow">Chapter 02 · Little pieces of us</p>
+        <h2>Our Memory Garden 🌷</h2>
+        <p>Every picture holds a little piece of my heart.</p>
       </div>
-    </article>
 
-    <button
-      class="primary-button letter-next-button"
-      id="letterNextButton"
-      type="button"
-      data-next="10"
-      hidden
-    >
-      Your Birthday Surprise 🎂
-    </button>
-  </div>
-</section>
-
-    <!-- SCENE 10 -->
-    <section class="scene" id="scene10">
-      <img class="page-sticker sticker-bottom-left"
-           src="Bubu4.gif" alt="" aria-hidden="true">
-
-      <div class="content">
-        <span class="eyebrow">Today is your special day</span>
-
-<button
-  id="birthdayCakeButton"
-  class="birthday-cake cake-image-button"
-  type="button"
-  aria-label="Tap the birthday picture to make a wish"
->
-  <img
- src="Picsart_26-10-11_11-25-12-045_copy_713x713.png"
-    alt="Birthday celebration with two cute bears and a birthday cake"
-    class="birthday-cake-image"
-  >
-</button>
-
-        <p id="cakeWishMessage" class="cake-wish-message" hidden>
-          Close your eyes, make a wish, Ammu! ✨💗
-        </p>
-
-        <h1 class="hero-title birthday-title">
-          Happy Birthday <span>Ammu!</span>
-        </h1>
-
-        <figure class="photo-frame featured-photo final-photo">
-          <img src="images/favourite-photo.jpg"
-               alt="My favourite photo of Ammu"
-               class="memory-photo" loading="lazy">
-          <figcaption>
-            My favourite person, my favourite smile ♡
-          </figcaption>
-        </figure>
-
-        <article class="birthday-message-card">
-          <p id="birthdayMessageDisplay">
-            WRITE YOUR PERSONAL BIRTHDAY MESSAGE HERE
-          </p>
-        </article>
-
-        <button id="restartButton" class="secondary-button" type="button">
-          ↺ Relive Our Story
+      <div class="gallery">
+        <button class="photo-card" data-photo="0">
+          <img src="https://raw.githubusercontent.com/mubarakshahith2008-arch/For_ammu_/main/Image/IMG-20251013-WA0021.jpg" alt="Our memory one">
+          <span>Memory 01 ❤️</span>
         </button>
-
-<!-- ANIMATED GIFT BOX -->
-<div class="gift-section">
-  <p class="highlight-text">A little gift, just for you 🎁</p>
-
-  <button
-    id="giftBoxButton"
-    class="gift-box-button"
-    type="button"
-    aria-expanded="false"
-    aria-controls="finalSurprise"
-  >
-    <span class="gift-box" aria-hidden="true">
-      <span class="gift-lid"></span>
-      <span class="gift-ribbon"></span>
-      <span class="gift-body"></span>
-    </span>
-
-    <span class="gift-hint">Tap to open your gift ♡</span>
-  </button>
-
-        <!-- CINEMATIC FINAL SURPRISE -->
-        <div id="finalSurprise" class="final-surprise" hidden>
-          <div class="surprise-sparkles" aria-hidden="true">✦ ✧ ✦</div>
-          <div class="surprise-heart" aria-hidden="true">💖</div>
-          <p class="surprise-eyebrow">A wish from my heart</p>
-          <h2>Happy Birthday, <span>Ammu!</span></h2>
-          <p class="surprise-message">
-            You make my memories more beautiful.
-            May your special day be filled with happiness, love, and smiles. ♡
-          </p>
-          <button id="finalReplayButton" class="primary-button" type="button">
-            Relive Our Story ↺
-          </button>
-        </div>
-
-        <p class="final-note">Made with love, just for you. ♡</p>
+        <button class="photo-card" data-photo="1">
+          <img src="https://raw.githubusercontent.com/mubarakshahith2008-arch/For_ammu_/main/Image/IMG-20251104-WA0009.jpg" alt="Our memory two">
+          <span>Memory 02 🌸</span>
+        </button>
+        <button class="photo-card" data-photo="2">
+          <img src="https://raw.githubusercontent.com/mubarakshahith2008-arch/For_ammu_/main/Image/IMG_20260829_210124_069.jpg" alt="Our memory three">
+          <span>Memory 03 ✨</span>
+        </button>
+        <button class="photo-card" data-photo="3">
+          <img src="https://raw.githubusercontent.com/mubarakshahith2008-arch/For_ammu_/main/Image/IMG_20260915_142113_244.jpg" alt="Our memory four">
+          <span>Memory 04 💗</span>
+        </button>
+        <button class="photo-card" data-photo="4">
+          <img src="https://raw.githubusercontent.com/mubarakshahith2008-arch/For_ammu_/main/Image/IMG_20260915_142527_289.jpg" alt="Our memory five">
+          <span>Memory 05 🧸</span>
+        </button>
+        <button class="photo-card wallpaper-card" data-photo="5">
+          <img src="https://raw.githubusercontent.com/mubarakshahith2008-arch/For_ammu_/main/Image/file_00000000f3f47208bfd42682f109e520.png" alt="Ammu's phone wallpaper">
+          <span>My favourite view 💕</span>
+        </button>
       </div>
+
+      <p class="small-note">Tap any picture to see it larger.</p>
+      <button class="primary" data-next="letter">A letter for you 💌</button>
+    </section>
+
+    <section class="scene" id="letter">
+      <article class="glass-card letter-card">
+        <img class="cute-gif" src="Image/Bubu4.gif" alt="Cute cuddling bears">
+        <p class="eyebrow">Chapter 03 · From my heart</p>
+        <h2>Dear Ammu 💌</h2>
+        <div id="letterText" class="letter-text">
+          You make ordinary moments feel special. Your smile brings warmth
+          to my world, and thinking about you can turn a difficult day into
+          a better one. I may not always find the perfect words, but I want
+          you to know that you are precious to me. If I could keep one
+          beautiful feeling forever, it would be the happiness I feel when
+          I think of you. This little website is one small way to show you
+          how much you mean to me. ❤️
+        </div>
+        <button class="secondary" id="letterBtn">Read my letter ✨</button>
+        <button class="primary" data-next="proposal">One more thing… 💗</button>
+      </article>
+    </section>
+
+    <section class="scene" id="proposal">
+      <article class="glass-card proposal-card">
+        <img class="story-gif" src="Image/bearcuddle.gif" alt="Two bears cuddling">
+        <p class="eyebrow">One little question</p>
+        <h2>You and me? 💖</h2>
+        <p>
+          If I could make one wish for our story, it would be for more
+          smiles, more memories, and more beautiful moments together.
+        </p>
+        <h3>Will you keep making memories with me? 🥹</h3>
+        <div class="button-row">
+          <button class="primary" id="yesBtn">Yes, Ammu! ❤️</button>
+          <button class="secondary" id="noBtn">Let me think 🙈</button>
+        </div>
+        <p id="proposalReply" aria-live="polite"></p>
+      </article>
+    </section>
+
+    <section class="scene" id="birthday">
+      <article class="hero-card birthday-card">
+        <img class="cute-gif" src="Image/DanceDance.gif" alt="Dancing bears">
+        <p class="eyebrow">Made with all my heart</p>
+        <h1>Happy Birthday, <span>Ammu!</span> 🎂</h1>
+        <p class="lead">
+          May your days be full of laughter, your dreams find their way,
+          and your heart always have a reason to smile.
+        </p>
+        <img class="gift-gif" src="Image/Picsart_26-10-11_11-25-12-045_copy_713x713.png" alt="Birthday surprise">
+        <p class="highlight">You will always have a special place in my heart. ❤️</p>
+        <button class="primary" id="surpriseBtn">One last surprise 🎁</button>
+        <div id="surprise" hidden>
+          <img class="cute-gif" src="Image/unyel.gif" alt="A little surprise">
+          <h2>ammu_143 ❤️</h2>
+          <p>Sending you a million hugs, a thousand smiles, and all my love.</p>
+        </div>
+        <button class="secondary" id="restartBtn">Relive our story ↻</button>
+      </article>
     </section>
   </main>
 
-  <!-- Fireworks canvas -->
-  <canvas id="fireworksCanvas" aria-hidden="true"></canvas>
-
-  <!-- Photo viewer -->
-  <div id="photoViewer"
-       class="photo-viewer"
-       role="dialog"
-       aria-modal="true"
-       aria-label="Expanded photo viewer"
-       aria-hidden="true">
-    <button id="closePhotoViewer"
-            class="close-viewer"
-            type="button"
-            aria-label="Close photo viewer">×</button>
-    <img id="expandedPhoto" src="" alt="Expanded memory">
+  <div class="bottom-heart">
+    <button id="heartBtn" aria-label="Send Ammu a heart">♡</button>
+    <span id="heartLabel">Tap to send love · ammu_143</span>
   </div>
 
-  <noscript>
-    <p class="noscript-message">
-      Please enable JavaScript to enjoy all the animations on this page.
-    </p>
-  </noscript>
+  <dialog id="photoDialog">
+    <button id="closePhoto" class="close-btn" aria-label="Close photo">✕</button>
+    <img id="largePhoto" src="" alt="Expanded memory">
+    <p id="photoCaption"></p>
+  </dialog>
+
+  <footer>Made with ❤️, just for Ammu</footer>
+  <script src="script.js"></script>
 </body>
 </html>
