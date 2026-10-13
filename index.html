@@ -1,164 +1,471 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#160b2b">
-  <title>For Ammu ❤️</title>
-  <link rel="stylesheet" href="style.css">
+    <!-- Sets the character encoding so hearts and other symbols display correctly. -->
+    <meta charset="UTF-8">
+
+    <!-- Makes the layout adapt to mobile phones and desktop screens. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- The text shown in the browser tab. -->
+    <title>For Ammu ❤️</title>
+
+    <!-- Loads our separate CSS file for colours, layouts, and animations. -->
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <canvas id="stars"></canvas>
-  <div id="hearts"></div>
 
-  <header class="topbar">
-    <a class="brand" href="#" id="brand">❤️ ammu_143</a>
-    <button id="musicBtn" class="music-btn" aria-label="Play or mute music">
-      🎵 Play music
-    </button>
-  </header>
+    <!-- Floating decorative hearts are added here by JavaScript. -->
+    <div id="floatingHearts" aria-hidden="true"></div>
 
-  <audio id="song" src="song.mpeg" loop preload="metadata"></audio>
+    <!-- =========================================================
+         SCREEN 1: ANIMATED WELCOME
+         This is the first screen the visitor sees.
+         ========================================================= -->
 
-  <main>
-    <section class="scene active" id="welcome">
-      <div class="hero-card">
-        <img class="cute-gif" src="Image/Bubu3.gif" alt="Cute animated bears">
-        <p class="eyebrow">A little universe made for you ✨</p>
-        <h1>For my <span>Ammu</span> ❤️</h1>
-        <p class="lead">
-          Among all the stars in this universe, you will always be my favourite.
-        </p>
-        <div class="date-pill">Our little story · October 31</div>
-        <button class="primary" data-next="story">Open my heart 💌</button>
-      </div>
-    </section>
+    <section id="welcomeScreen" class="screen welcome-screen is-visible">
 
-    <section class="scene" id="story">
-      <article class="glass-card">
-        <p class="eyebrow">Chapter 01 · Where it began</p>
-        <h2>Instagram Strangers ✨</h2>
-        <p>
-          We started as strangers, but little by little, you became someone
-          incredibly special to me. Sometimes the most beautiful stories
-          begin in the most unexpected ways.
-        </p>
-        <img class="story-gif" src="Image/BearBounce.gif" alt="Bouncing bear">
-        <p class="highlight">And somehow, my heart found you. ❤️</p>
-        <button class="primary" data-next="memories">Our memories →</button>
-      </article>
-    </section>
+        <!-- Decorative stars behind the welcome text. -->
+        <div class="star star-one" aria-hidden="true">✦</div>
+        <div class="star star-two" aria-hidden="true">✧</div>
+        <div class="star star-three" aria-hidden="true">✦</div>
+        <div class="star star-four" aria-hidden="true">✧</div>
 
-    <section class="scene" id="memories">
-      <div class="section-heading">
-        <p class="eyebrow">Chapter 02 · Little pieces of us</p>
-        <h2>Our Memory Garden 🌷</h2>
-        <p>Every picture holds a little piece of my heart.</p>
-      </div>
+        <!-- The welcome card animates into view when the website opens. -->
+        <div class="welcome-card">
 
-      <div class="gallery">
-        <button class="photo-card" data-photo="0">
-          <img src="https://raw.githubusercontent.com/mubarakshahith2008-arch/For_ammu_/main/Image/IMG-20251013-WA0021.jpg" alt="Our memory one">
-          <span>Memory 01 ❤️</span>
-        </button>
-        <button class="photo-card" data-photo="1">
-          <img src="https://raw.githubusercontent.com/mubarakshahith2008-arch/For_ammu_/main/Image/IMG-20251104-WA0009.jpg" alt="Our memory two">
-          <span>Memory 02 🌸</span>
-        </button>
-        <button class="photo-card" data-photo="2">
-          <img src="https://raw.githubusercontent.com/mubarakshahith2008-arch/For_ammu_/main/Image/IMG_20260829_210124_069.jpg" alt="Our memory three">
-          <span>Memory 03 ✨</span>
-        </button>
-        <button class="photo-card" data-photo="3">
-          <img src="https://raw.githubusercontent.com/mubarakshahith2008-arch/For_ammu_/main/Image/IMG_20260915_142113_244.jpg" alt="Our memory four">
-          <span>Memory 04 💗</span>
-        </button>
-        <button class="photo-card" data-photo="4">
-          <img src="https://raw.githubusercontent.com/mubarakshahith2008-arch/For_ammu_/main/Image/IMG_20260915_142527_289.jpg" alt="Our memory five">
-          <span>Memory 05 🧸</span>
-        </button>
-        <button class="photo-card wallpaper-card" data-photo="5">
-          <img src="https://raw.githubusercontent.com/mubarakshahith2008-arch/For_ammu_/main/Image/file_00000000f3f47208bfd42682f109e520.png" alt="Ammu's phone wallpaper">
-          <span>My favourite view 💕</span>
-        </button>
-      </div>
+            <!-- Small decorative label above the main heading. -->
+            <p class="eyebrow reveal-on-load">A LITTLE WORLD MADE FOR YOU</p>
 
-      <p class="small-note">Tap any picture to see it larger.</p>
-      <button class="primary" data-next="letter">A letter for you 💌</button>
-    </section>
+            <!-- Main welcome title. Change the name here if needed. -->
+            <h1 class="welcome-title reveal-on-load">
+                Welcome, <span>Ammu</span> ❤️
+            </h1>
 
-    <section class="scene" id="letter">
-      <article class="glass-card letter-card">
-        <img class="cute-gif" src="Image/Bubu4.gif" alt="Cute cuddling bears">
-        <p class="eyebrow">Chapter 03 · From my heart</p>
-        <h2>Dear Ammu 💌</h2>
-        <div id="letterText" class="letter-text">
-          You make ordinary moments feel special. Your smile brings warmth
-          to my world, and thinking about you can turn a difficult day into
-          a better one. I may not always find the perfect words, but I want
-          you to know that you are precious to me. If I could keep one
-          beautiful feeling forever, it would be the happiness I feel when
-          I think of you. This little website is one small way to show you
-          how much you mean to me. ❤️
+            <!-- A short introduction, not a copied relationship story. -->
+            <p class="welcome-subtitle reveal-on-load">
+                A special little place, made with love.
+            </p>
+
+            <!-- Decorative heart that gently beats. -->
+            <div class="welcome-heart" aria-hidden="true">♡</div>
+
+            <!-- The button moves the visitor to the password screen. -->
+            <button
+                id="enterWelcomeButton"
+                class="primary-button"
+                type="button">
+                Open Your Surprise ✨
+            </button>
+
+            <!-- This hint tells the visitor what happens next. -->
+            <p class="tiny-note">A little surprise is waiting for you</p>
+
         </div>
-        <button class="secondary" id="letterBtn">Read my letter ✨</button>
-        <button class="primary" data-next="proposal">One more thing… 💗</button>
-      </article>
     </section>
 
-    <section class="scene" id="proposal">
-      <article class="glass-card proposal-card">
-        <img class="story-gif" src="Image/bearcuddle.gif" alt="Two bears cuddling">
-        <p class="eyebrow">One little question</p>
-        <h2>You and me? 💖</h2>
-        <p>
-          If I could make one wish for our story, it would be for more
-          smiles, more memories, and more beautiful moments together.
-        </p>
-        <h3>Will you keep making memories with me? 🥹</h3>
-        <div class="button-row">
-          <button class="primary" id="yesBtn">Yes, Ammu! ❤️</button>
-          <button class="secondary" id="noBtn">Let me think 🙈</button>
+
+    <!-- =========================================================
+         SCREEN 2: PASSWORD GATE
+         This screen appears after the welcome button is clicked.
+         ========================================================= -->
+
+    <section id="passwordScreen" class="screen password-screen" hidden>
+
+        <!-- Card containing the password form. -->
+        <div class="password-card">
+
+            <!-- Decorative lock symbol. -->
+            <div class="lock-symbol" aria-hidden="true">🔐</div>
+
+            <!-- Heading for the password screen. -->
+            <p class="eyebrow">JUST FOR YOU</p>
+
+            <h1>One Little Secret ❤️</h1>
+
+            <p class="section-description">
+                Enter the special password to open your surprise.
+            </p>
+
+            <!-- The password form is handled by JavaScript. -->
+            <form id="passwordForm">
+
+                <!-- Label improves accessibility and identifies the input. -->
+                <label for="passwordInput">Your password</label>
+
+                <!-- type=password hides the typed characters. -->
+                <input
+                    id="passwordInput"
+                    name="password"
+                    type="password"
+                    placeholder="Enter your password"
+                    autocomplete="off"
+                    required>
+
+                <!-- Submitting this form checks the chosen password. -->
+                <button class="primary-button" type="submit">
+                    Unlock My Surprise 💗
+                </button>
+
+            </form>
+
+            <!-- JavaScript shows an error or success-related message here. -->
+            <p id="passwordMessage" class="feedback-message" aria-live="polite"></p>
+
+            <!-- Returns to the welcome screen if the visitor changes their mind. -->
+            <button
+                id="backToWelcomeButton"
+                class="text-button"
+                type="button">
+                ← Go back
+            </button>
+
         </div>
-        <p id="proposalReply" aria-live="polite"></p>
-      </article>
     </section>
 
-    <section class="scene" id="birthday">
-      <article class="hero-card birthday-card">
-        <img class="cute-gif" src="Image/DanceDance.gif" alt="Dancing bears">
-        <p class="eyebrow">Made with all my heart</p>
-        <h1>Happy Birthday, <span>Ammu!</span> 🎂</h1>
-        <p class="lead">
-          May your days be full of laughter, your dreams find their way,
-          and your heart always have a reason to smile.
-        </p>
-        <img class="gift-gif" src="Image/Picsart_26-10-11_11-25-12-045_copy_713x713.png" alt="Birthday surprise">
-        <p class="highlight">You will always have a special place in my heart. ❤️</p>
-        <button class="primary" id="surpriseBtn">One last surprise 🎁</button>
-        <div id="surprise" hidden>
-          <img class="cute-gif" src="Image/unyel.gif" alt="A little surprise">
-          <h2>ammu_143 ❤️</h2>
-          <p>Sending you a million hugs, a thousand smiles, and all my love.</p>
-        </div>
-        <button class="secondary" id="restartBtn">Relive our story ↻</button>
-      </article>
+
+    <!-- =========================================================
+         SCREEN 3: THE MAIN BIRTHDAY EXPERIENCE
+         Hidden until the password is entered correctly.
+         ========================================================= -->
+
+    <section id="siteScreen" class="screen site-screen" hidden>
+
+        <!-- Sticky-style navigation at the top of the main page. -->
+        <header class="site-header">
+
+            <!-- Small website brand. -->
+            <a class="site-logo" href="#home" aria-label="For Ammu home">
+                For Ammu <span>♥</span>
+            </a>
+
+            <!-- Navigation links jump to sections on the page. -->
+            <nav class="site-navigation" aria-label="Main navigation">
+                <a href="#home">Home</a>
+                <a href="#specialDates">Our Dates</a>
+                <a href="#photos">Photos</a>
+                <a href="#birthdayWish">Birthday Wish</a>
+            </nav>
+
+        </header>
+
+
+        <!-- MAIN CONTENT: individual sections reveal as the user scrolls. -->
+        <main id="home">
+
+            <!-- -------------------------------------------------
+                 HERO SECTION
+                 A colourful landing section after unlocking.
+                 ------------------------------------------------- -->
+
+            <section class="hero section-padding">
+
+                <!-- Decorative glowing circles behind the content. -->
+                <div class="glow-orb orb-one" aria-hidden="true"></div>
+                <div class="glow-orb orb-two" aria-hidden="true"></div>
+
+                <div class="hero-content" data-reveal>
+
+                    <p class="eyebrow">A LITTLE SURPRISE FOR MY FAVOURITE PERSON</p>
+
+                    <!-- Main birthday heading. -->
+                    <h1 class="hero-title">
+                        Happy Birthday,
+                        <span>Ammu</span> 🎂
+                    </h1>
+
+                    <!-- Replace this line with your own message whenever you're ready. -->
+                    <p class="hero-subtitle">
+                        A little universe of memories, moments, and love.
+                    </p>
+
+                    <!-- Sends the visitor down to the birthday message. -->
+                    <a class="primary-button button-link" href="#birthdayWish">
+                        Your Birthday Surprise ↓
+                    </a>
+
+                </div>
+
+                <!-- Purely decorative animated hearts. -->
+                <div class="hero-decoration heart-decoration" aria-hidden="true">
+                    💗 ✨ 💖
+                </div>
+
+            </section>
+
+
+            <!-- -------------------------------------------------
+                 SPECIAL DATES
+                 Only the meanings supplied by you are included.
+                 ------------------------------------------------- -->
+
+            <section id="specialDates" class="content-section section-padding">
+
+                <div class="section-heading" data-reveal>
+
+                    <p class="eyebrow">TWO DATES, TWO MEMORIES</p>
+
+                    <h2>Our Special Days ✨</h2>
+
+                    <p class="section-description">
+                        Two dates that will always mean something to us.
+                    </p>
+
+                </div>
+
+                <!-- The dates sit in separate cards for responsive layout. -->
+                <div class="date-grid">
+
+                    <!-- October 12: the first day you talked. -->
+                    <article class="date-card glass-card" data-reveal>
+
+                        <div class="date-icon" aria-hidden="true">💌</div>
+
+                        <p class="date-number">OCTOBER 12</p>
+
+                        <h3>The First Conversation</h3>
+
+                        <p>
+                            The first day we talked.
+                        </p>
+
+                        <!-- Add the year or your own details here later. -->
+                        <p class="editable-hint">
+                            <!-- Add your own memory here when ready. -->
+                            Your memory can go here.
+                        </p>
+
+                    </article>
+
+
+                    <!-- April 26: the day you became a couple. -->
+                    <article class="date-card glass-card" data-reveal>
+
+                        <div class="date-icon" aria-hidden="true">💞</div>
+
+                        <p class="date-number">APRIL 26</p>
+
+                        <h3>The Day We Became a Couple</h3>
+
+                        <p>
+                            The first day of our relationship.
+                        </p>
+
+                        <!-- Add the year or your own details here later. -->
+                        <p class="editable-hint">
+                            <!-- Add your own memory here when ready. -->
+                            Your memory can go here.
+                        </p>
+
+                    </article>
+
+                </div>
+            </section>
+
+
+            <!-- -------------------------------------------------
+                 OPTIONAL CUTE GIFS
+                 Place the specified image files in images/gifs/.
+                 Missing files are hidden automatically by JavaScript.
+                 ------------------------------------------------- -->
+
+            <section class="content-section sticker-section section-padding">
+
+                <div class="section-heading" data-reveal>
+
+                    <p class="eyebrow">A LITTLE CUTENESS</p>
+
+                    <h2>Little Happy Things 🧸</h2>
+
+                    <p class="section-description">
+                        Cute animations to make the birthday page feel playful.
+                    </p>
+
+                </div>
+
+                <!-- JavaScript loads these optional GIFs if the files exist. -->
+                <div class="sticker-grid" id="stickerGrid">
+
+                    <img
+                        class="sticker"
+                        src="images/gifs/BearBounce.gif"
+                        alt="Bouncing bear animation"
+                        loading="lazy">
+
+                    <img
+                        class="sticker"
+                        src="images/gifs/Bubu3.gif"
+                        alt="Bubu animation"
+                        loading="lazy">
+
+                    <img
+                        class="sticker"
+                        src="images/gifs/Bubu4.gif"
+                        alt="Bubu and Dudu animation"
+                        loading="lazy">
+
+                    <img
+                        class="sticker"
+                        src="images/gifs/DanceDance.gif"
+                        alt="Dancing animation"
+                        loading="lazy">
+
+                    <img
+                        class="sticker"
+                        src="images/gifs/Picsart_26-10-11_11-25-12-045_copy_713x713.png"
+                        alt="Cute decorative sticker"
+                        loading="lazy">
+
+                    <img
+                        class="sticker"
+                        src="images/gifs/unyel.gif"
+                        alt="Cute animated sticker"
+                        loading="lazy">
+
+                    <img
+                        class="sticker"
+                        src="images/gifs/bearcuddle.gif"
+                        alt="Cuddling bears animation"
+                        loading="lazy">
+
+                </div>
+
+            </section>
+
+
+            <!-- -------------------------------------------------
+                 PHOTO GALLERY
+                 All 12 spaces start empty.
+                 Add photo-01.jpg through photo-12.jpg to images/.
+                 ------------------------------------------------- -->
+
+            <section id="photos" class="content-section section-padding">
+
+                <div class="section-heading" data-reveal>
+
+                    <p class="eyebrow">YOUR MEMORIES GO HERE</p>
+
+                    <h2>Our Little Gallery 📸</h2>
+
+                    <p class="section-description">
+                        Twelve spaces for the pictures you choose.
+                    </p>
+
+                </div>
+
+                <!-- JavaScript creates exactly 12 replaceable photo spaces here. -->
+                <div
+                    id="photoGrid"
+                    class="photo-grid"
+                    aria-label="Twelve photo placeholders">
+                </div>
+
+            </section>
+
+
+            <!-- -------------------------------------------------
+                 PERSONAL MESSAGE
+                 No story from the old ZIP projects is copied here.
+                 Replace the placeholders with your own writing.
+                 ------------------------------------------------- -->
+
+            <section id="ourWords" class="content-section section-padding">
+
+                <div class="letter-card glass-card" data-reveal>
+
+                    <div class="letter-icon" aria-hidden="true">💌</div>
+
+                    <p class="eyebrow">A NOTE FOR YOU</p>
+
+                    <h2>A Little Letter</h2>
+
+                    <!-- Replace this placeholder with your personal message. -->
+                    <p class="editable-message">
+                        [Write your own personal message to Ammu here.]
+                    </p>
+
+                    <!-- Optional signature; change it to your preferred name. -->
+                    <p class="signature">With love, [YOUR NAME] ❤️</p>
+
+                </div>
+
+            </section>
+
+
+            <!-- -------------------------------------------------
+                 BIRTHDAY WISH
+                 This is the final birthday section.
+                 ------------------------------------------------- -->
+
+            <section id="birthdayWish" class="birthday-finale section-padding">
+
+                <div class="finale-card" data-reveal>
+
+                    <p class="eyebrow">MADE ESPECIALLY FOR YOU</p>
+
+                    <div class="cake-illustration" aria-hidden="true">🎂</div>
+
+                    <h2>Happy Birthday, Ammu! ❤️</h2>
+
+                    <!-- Replace the text below with your own birthday wish. -->
+                    <p class="editable-message">
+                        [Write your birthday wish here.]
+                    </p>
+
+                    <!-- Clicking this button creates a burst of animated hearts. -->
+                    <button
+                        id="heartBurstButton"
+                        class="primary-button"
+                        type="button">
+                        Send You All My Love 💗
+                    </button>
+
+                    <!-- The requested heart label. -->
+                    <p class="heart-signature">♡ ammu_143 ♡</p>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- Footer at the end of the birthday experience. -->
+        <footer class="site-footer">
+            Made with love for Ammu ❤️
+        </footer>
+
+
+        <!-- Music controls stay visible as the visitor explores the page. -->
+        <aside class="music-controls" aria-label="Music controls">
+
+            <!-- Plays or pauses the supplied song. -->
+            <button id="musicToggleButton" type="button">
+                ▶ Play music
+            </button>
+
+            <!-- Mutes or unmutes the supplied song. -->
+            <button id="muteToggleButton" type="button">
+                🔊 Mute
+            </button>
+
+        </aside>
+
+        <!-- Replace song.mpeg.mp3 with a different filename if needed. -->
+        <audio
+            id="backgroundMusic"
+            src="song.mpeg.mp3"
+            loop
+            preload="metadata">
+        </audio>
+
     </section>
-  </main>
 
-  <div class="bottom-heart">
-    <button id="heartBtn" aria-label="Send Ammu a heart">♡</button>
-    <span id="heartLabel">Tap to send love · ammu_143</span>
-  </div>
 
-  <dialog id="photoDialog">
-    <button id="closePhoto" class="close-btn" aria-label="Close photo">✕</button>
-    <img id="largePhoto" src="" alt="Expanded memory">
-    <p id="photoCaption"></p>
-  </dialog>
+    <!-- Loads all interactive behaviours from the JavaScript file. -->
+    <script src="script.js"></script>
 
-  <footer>Made with ❤️, just for Ammu</footer>
-  <script src="script.js"></script>
 </body>
 </html>
