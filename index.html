@@ -1,58 +1,63 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <!-- Sets the character encoding so hearts and other symbols display correctly. -->
+    <!-- Allows hearts, emojis, and special characters to display correctly. -->
     <meta charset="UTF-8">
 
-    <!-- Makes the layout adapt to mobile phones and desktop screens. -->
+    <!-- Makes the website responsive on mobile phones and tablets. -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- The text shown in the browser tab. -->
+    <!-- Website title displayed in the browser tab. -->
     <title>For Ammu ❤️</title>
 
-    <!-- Loads our separate CSS file for colours, layouts, and animations. -->
+    <!-- Connects this HTML page to the separate CSS design file. -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- Floating decorative hearts are added here by JavaScript. -->
+    <!-- JavaScript adds floating hearts inside this container. -->
     <div id="floatingHearts" aria-hidden="true"></div>
 
-    <!-- =========================================================
-         SCREEN 1: ANIMATED WELCOME
+
+    <!-- =======================================================
+         SCREEN 1: ANIMATED WELCOME SCREEN
          This is the first screen the visitor sees.
-         ========================================================= -->
+         ======================================================= -->
 
-    <section id="welcomeScreen" class="screen welcome-screen is-visible">
+    <section id="welcomeScreen"
+        class="screen welcome-screen is-visible">
 
-        <!-- Decorative stars behind the welcome text. -->
+        <!-- Decorative stars around the welcome card. -->
         <div class="star star-one" aria-hidden="true">✦</div>
         <div class="star star-two" aria-hidden="true">✧</div>
         <div class="star star-three" aria-hidden="true">✦</div>
         <div class="star star-four" aria-hidden="true">✧</div>
 
-        <!-- The welcome card animates into view when the website opens. -->
+        <!-- Main welcome card with its own entrance animation. -->
         <div class="welcome-card">
 
-            <!-- Small decorative label above the main heading. -->
-            <p class="eyebrow reveal-on-load">A LITTLE WORLD MADE FOR YOU</p>
+            <!-- Small introductory text. -->
+            <p class="eyebrow reveal-on-load">
+                A LITTLE WORLD MADE FOR YOU
+            </p>
 
-            <!-- Main welcome title. Change the name here if needed. -->
+            <!-- Main welcome heading. -->
             <h1 class="welcome-title reveal-on-load">
                 Welcome, <span>Ammu</span> ❤️
             </h1>
 
-            <!-- A short introduction, not a copied relationship story. -->
+            <!-- Welcome message. Change this sentence whenever you like. -->
             <p class="welcome-subtitle reveal-on-load">
                 A special little place, made with love.
             </p>
 
-            <!-- Decorative heart that gently beats. -->
+            <!-- Decorative animated heart. -->
             <div class="welcome-heart" aria-hidden="true">♡</div>
 
-            <!-- The button moves the visitor to the password screen. -->
+            <!-- Opens the password screen when clicked. -->
             <button
                 id="enterWelcomeButton"
                 class="primary-button"
@@ -60,42 +65,48 @@
                 Open Your Surprise ✨
             </button>
 
-            <!-- This hint tells the visitor what happens next. -->
-            <p class="tiny-note">A little surprise is waiting for you</p>
+            <!-- Small hint below the welcome button. -->
+            <p class="tiny-note">
+                A little surprise is waiting for you
+            </p>
 
         </div>
     </section>
 
 
-    <!-- =========================================================
-         SCREEN 2: PASSWORD GATE
-         This screen appears after the welcome button is clicked.
-         ========================================================= -->
+    <!-- =======================================================
+         SCREEN 2: PASSWORD SCREEN
+         The visitor must enter the correct password to continue.
+         ======================================================= -->
 
-    <section id="passwordScreen" class="screen password-screen" hidden>
+    <section id="passwordScreen"
+        class="screen password-screen"
+        hidden>
 
         <!-- Card containing the password form. -->
         <div class="password-card">
 
-            <!-- Decorative lock symbol. -->
+            <!-- Decorative lock icon. -->
             <div class="lock-symbol" aria-hidden="true">🔐</div>
 
-            <!-- Heading for the password screen. -->
+            <!-- Small heading above the password input. -->
             <p class="eyebrow">JUST FOR YOU</p>
 
+            <!-- Password screen title. -->
             <h1>One Little Secret ❤️</h1>
 
+            <!-- Brief instruction. -->
             <p class="section-description">
                 Enter the special password to open your surprise.
             </p>
 
-            <!-- The password form is handled by JavaScript. -->
+            <!-- JavaScript checks the password when the form is submitted. -->
             <form id="passwordForm">
 
-                <!-- Label improves accessibility and identifies the input. -->
+                <!-- Label describes the input field. -->
                 <label for="passwordInput">Your password</label>
 
-                <!-- type=password hides the typed characters. -->
+                <!-- Password characters are hidden as the visitor types. -->
                 <input
                     id="passwordInput"
                     name="password"
@@ -104,17 +115,21 @@
                     autocomplete="off"
                     required>
 
-                <!-- Submitting this form checks the chosen password. -->
+                <!-- Submits the password for checking. -->
                 <button class="primary-button" type="submit">
                     Unlock My Surprise 💗
                 </button>
 
             </form>
 
-            <!-- JavaScript shows an error or success-related message here. -->
-            <p id="passwordMessage" class="feedback-message" aria-live="polite"></p>
+            <!-- JavaScript displays password errors in this area. -->
+            <p
+                id="passwordMessage"
+                class="feedback-message"
+                aria-live="polite">
+            </p>
 
-            <!-- Returns to the welcome screen if the visitor changes their mind. -->
+            <!-- Returns to the welcome screen. -->
             <button
                 id="backToWelcomeButton"
                 class="text-button"
@@ -126,22 +141,28 @@
     </section>
 
 
-    <!-- =========================================================
-         SCREEN 3: THE MAIN BIRTHDAY EXPERIENCE
-         Hidden until the password is entered correctly.
-         ========================================================= -->
+    <!-- =======================================================
+         SCREEN 3: MAIN BIRTHDAY WEBSITE
+         This section becomes visible after a correct password.
+         ======================================================= -->
 
-    <section id="siteScreen" class="screen site-screen" hidden>
+    <section id="siteScreen"
+        class="screen site-screen"
+        hidden>
 
-        <!-- Sticky-style navigation at the top of the main page. -->
+        <!-- ===================================================
+             NAVIGATION HEADER
+             Links jump to the main sections of the website.
+             =================================================== -->
+
         <header class="site-header">
 
-            <!-- Small website brand. -->
+            <!-- Small website logo. -->
             <a class="site-logo" href="#home" aria-label="For Ammu home">
                 For Ammu <span>♥</span>
             </a>
 
-            <!-- Navigation links jump to sections on the page. -->
+            <!-- Navigation links for different page sections. -->
             <nav class="site-navigation" aria-label="Main navigation">
                 <a href="#home">Home</a>
                 <a href="#specialDates">Our Dates</a>
@@ -152,57 +173,69 @@
         </header>
 
 
-        <!-- MAIN CONTENT: individual sections reveal as the user scrolls. -->
+        <!-- All main website content is placed inside main. -->
         <main id="home">
 
-            <!-- -------------------------------------------------
+
+            <!-- =================================================
                  HERO SECTION
-                 A colourful landing section after unlocking.
-                 ------------------------------------------------- -->
+                 The first birthday section after unlocking.
+                 ================================================= -->
 
             <section class="hero section-padding">
 
-                <!-- Decorative glowing circles behind the content. -->
+                <!-- Decorative glowing circles behind the heading. -->
                 <div class="glow-orb orb-one" aria-hidden="true"></div>
                 <div class="glow-orb orb-two" aria-hidden="true"></div>
 
+                <!-- This content reveals when the page opens. -->
                 <div class="hero-content" data-reveal>
 
-                    <p class="eyebrow">A LITTLE SURPRISE FOR MY FAVOURITE PERSON</p>
+                    <!-- Small introductory heading. -->
+                    <p class="eyebrow">
+                        A LITTLE SURPRISE FOR MY FAVOURITE PERSON
+                    </p>
 
-                    <!-- Main birthday heading. -->
+                    <!-- Main birthday title. -->
                     <h1 class="hero-title">
                         Happy Birthday,
                         <span>Ammu</span> 🎂
                     </h1>
 
-                    <!-- Replace this line with your own message whenever you're ready. -->
+                    <!-- Replace this with a personal sentence if desired. -->
                     <p class="hero-subtitle">
                         A little universe of memories, moments, and love.
                     </p>
 
-                    <!-- Sends the visitor down to the birthday message. -->
-                    <a class="primary-button button-link" href="#birthdayWish">
+                    <!-- Scrolls down to the birthday wish section. -->
+                    <a
+                        class="primary-button button-link"
+                        href="#birthdayWish">
                         Your Birthday Surprise ↓
                     </a>
 
                 </div>
 
-                <!-- Purely decorative animated hearts. -->
-                <div class="hero-decoration heart-decoration" aria-hidden="true">
+                <!-- Decorative hearts underneath the main heading. -->
+                <div
+                    class="hero-decoration heart-decoration"
+                    aria-hidden="true">
                     💗 ✨ 💖
                 </div>
 
             </section>
 
 
-            <!-- -------------------------------------------------
-                 SPECIAL DATES
-                 Only the meanings supplied by you are included.
-                 ------------------------------------------------- -->
+            <!-- =================================================
+                 SPECIAL DATES SECTION
+                 October 12 and April 26, as you described.
+                 ================================================= -->
 
-            <section id="specialDates" class="content-section section-padding">
+            <section
+                id="specialDates"
+                class="content-section section-padding">
 
+                <!-- Section heading that fades into view. -->
                 <div class="section-heading" data-reveal>
 
                     <p class="eyebrow">TWO DATES, TWO MEMORIES</p>
@@ -215,25 +248,27 @@
 
                 </div>
 
-                <!-- The dates sit in separate cards for responsive layout. -->
+                <!-- Two cards display the special dates. -->
                 <div class="date-grid">
 
                     <!-- October 12: the first day you talked. -->
                     <article class="date-card glass-card" data-reveal>
 
+                        <!-- Decorative symbol. -->
                         <div class="date-icon" aria-hidden="true">💌</div>
 
+                        <!-- Date of your first conversation. -->
                         <p class="date-number">OCTOBER 12</p>
 
+                        <!-- Meaning of the date. -->
                         <h3>The First Conversation</h3>
 
                         <p>
                             The first day we talked.
                         </p>
 
-                        <!-- Add the year or your own details here later. -->
+                        <!-- Replace this text with your own memory. -->
                         <p class="editable-hint">
-                            <!-- Add your own memory here when ready. -->
                             Your memory can go here.
                         </p>
 
@@ -243,19 +278,21 @@
                     <!-- April 26: the day you became a couple. -->
                     <article class="date-card glass-card" data-reveal>
 
+                        <!-- Decorative symbol. -->
                         <div class="date-icon" aria-hidden="true">💞</div>
 
+                        <!-- Date your relationship began. -->
                         <p class="date-number">APRIL 26</p>
 
+                        <!-- Meaning of the date. -->
                         <h3>The Day We Became a Couple</h3>
 
                         <p>
                             The first day of our relationship.
                         </p>
 
-                        <!-- Add the year or your own details here later. -->
+                        <!-- Replace this text with your own memory. -->
                         <p class="editable-hint">
-                            <!-- Add your own memory here when ready. -->
                             Your memory can go here.
                         </p>
 
@@ -265,14 +302,16 @@
             </section>
 
 
-            <!-- -------------------------------------------------
-                 OPTIONAL CUTE GIFS
-                 Place the specified image files in images/gifs/.
-                 Missing files are hidden automatically by JavaScript.
-                 ------------------------------------------------- -->
+            <!-- =================================================
+                 CUTE GIF AND STICKER SECTION
+                 Put your actual GIF files in images/gifs/.
+                 Missing files will be hidden by JavaScript.
+                 ================================================= -->
 
-            <section class="content-section sticker-section section-padding">
+            <section
+                class="content-section sticker-section section-padding">
 
+                <!-- Heading for the cute sticker section. -->
                 <div class="section-heading" data-reveal>
 
                     <p class="eyebrow">A LITTLE CUTENESS</p>
@@ -285,45 +324,52 @@
 
                 </div>
 
-                <!-- JavaScript loads these optional GIFs if the files exist. -->
+                <!-- Cute GIF images are displayed inside this grid. -->
                 <div class="sticker-grid" id="stickerGrid">
 
+                    <!-- Bouncing bear GIF. -->
                     <img
                         class="sticker"
                         src="images/gifs/BearBounce.gif"
                         alt="Bouncing bear animation"
                         loading="lazy">
 
+                    <!-- Bubu GIF number three. -->
                     <img
                         class="sticker"
                         src="images/gifs/Bubu3.gif"
                         alt="Bubu animation"
                         loading="lazy">
 
+                    <!-- Bubu GIF number four. -->
                     <img
                         class="sticker"
                         src="images/gifs/Bubu4.gif"
-                        alt="Bubu and Dudu animation"
+                        alt="Cute Bubu animation"
                         loading="lazy">
 
+                    <!-- Dancing GIF. -->
                     <img
                         class="sticker"
                         src="images/gifs/DanceDance.gif"
                         alt="Dancing animation"
                         loading="lazy">
 
+                    <!-- Decorative picture or sticker. -->
                     <img
                         class="sticker"
                         src="images/gifs/Picsart_26-10-11_11-25-12-045_copy_713x713.png"
                         alt="Cute decorative sticker"
                         loading="lazy">
 
+                    <!-- Another cute animated sticker. -->
                     <img
                         class="sticker"
                         src="images/gifs/unyel.gif"
                         alt="Cute animated sticker"
                         loading="lazy">
 
+                    <!-- Bear cuddling GIF. -->
                     <img
                         class="sticker"
                         src="images/gifs/bearcuddle.gif"
@@ -335,14 +381,17 @@
             </section>
 
 
-            <!-- -------------------------------------------------
+            <!-- =================================================
                  PHOTO GALLERY
-                 All 12 spaces start empty.
-                 Add photo-01.jpg through photo-12.jpg to images/.
-                 ------------------------------------------------- -->
+                 JavaScript creates 12 empty photo spaces.
+                 Add your own files to the images folder later.
+                 ================================================= -->
 
-            <section id="photos" class="content-section section-padding">
+            <section
+                id="photos"
+                class="content-section section-padding">
 
+                <!-- Photo section heading. -->
                 <div class="section-heading" data-reveal>
 
                     <p class="eyebrow">YOUR MEMORIES GO HERE</p>
@@ -355,7 +404,7 @@
 
                 </div>
 
-                <!-- JavaScript creates exactly 12 replaceable photo spaces here. -->
+                <!-- JavaScript inserts the 12 photo placeholders here. -->
                 <div
                     id="photoGrid"
                     class="photo-grid"
@@ -365,56 +414,70 @@
             </section>
 
 
-            <!-- -------------------------------------------------
-                 PERSONAL MESSAGE
-                 No story from the old ZIP projects is copied here.
-                 Replace the placeholders with your own writing.
-                 ------------------------------------------------- -->
+            <!-- =================================================
+                 PERSONAL LETTER SECTION
+                 This intentionally contains a blank personal message.
+                 No story content from the old ZIP projects is copied.
+                 ================================================= -->
 
-            <section id="ourWords" class="content-section section-padding">
+            <section
+                id="ourWords"
+                class="content-section section-padding">
 
+                <!-- Letter card with a reveal animation. -->
                 <div class="letter-card glass-card" data-reveal>
 
+                    <!-- Decorative envelope. -->
                     <div class="letter-icon" aria-hidden="true">💌</div>
 
+                    <!-- Small label for the personal letter. -->
                     <p class="eyebrow">A NOTE FOR YOU</p>
 
+                    <!-- Letter heading. -->
                     <h2>A Little Letter</h2>
 
-                    <!-- Replace this placeholder with your personal message. -->
+                    <!-- Replace this placeholder with your own words. -->
                     <p class="editable-message">
                         [Write your own personal message to Ammu here.]
                     </p>
 
-                    <!-- Optional signature; change it to your preferred name. -->
-                    <p class="signature">With love, [YOUR NAME] ❤️</p>
+                    <!-- Replace YOUR NAME with your preferred signature. -->
+                    <p class="signature">
+                        With love, [YOUR NAME] ❤️
+                    </p>
 
                 </div>
 
             </section>
 
 
-            <!-- -------------------------------------------------
-                 BIRTHDAY WISH
-                 This is the final birthday section.
-                 ------------------------------------------------- -->
+            <!-- =================================================
+                 BIRTHDAY FINALE
+                 The last special birthday section.
+                 ================================================= -->
 
-            <section id="birthdayWish" class="birthday-finale section-padding">
+            <section
+                id="birthdayWish"
+                class="birthday-finale section-padding">
 
+                <!-- The finale card appears with a reveal animation. -->
                 <div class="finale-card" data-reveal>
 
+                    <!-- Small heading above the birthday wish. -->
                     <p class="eyebrow">MADE ESPECIALLY FOR YOU</p>
 
+                    <!-- Animated cake decoration. -->
                     <div class="cake-illustration" aria-hidden="true">🎂</div>
 
+                    <!-- Final birthday heading. -->
                     <h2>Happy Birthday, Ammu! ❤️</h2>
 
-                    <!-- Replace the text below with your own birthday wish. -->
+                    <!-- Replace this placeholder with your birthday message. -->
                     <p class="editable-message">
                         [Write your birthday wish here.]
                     </p>
 
-                    <!-- Clicking this button creates a burst of animated hearts. -->
+                    <!-- Clicking this button creates floating hearts. -->
                     <button
                         id="heartBurstButton"
                         class="primary-button"
@@ -422,7 +485,7 @@
                         Send You All My Love 💗
                     </button>
 
-                    <!-- The requested heart label. -->
+                    <!-- Your requested heart label. -->
                     <p class="heart-signature">♡ ammu_143 ♡</p>
 
                 </div>
@@ -432,31 +495,46 @@
         </main>
 
 
-        <!-- Footer at the end of the birthday experience. -->
+        <!-- Footer at the bottom of the website. -->
         <footer class="site-footer">
             Made with love for Ammu ❤️
         </footer>
 
 
-        <!-- Music controls stay visible as the visitor explores the page. -->
+        <!-- ===================================================
+             MUSIC CONTROLS
+             These buttons control song.mpeg.mp3.
+             =================================================== -->
+
         <aside class="music-controls" aria-label="Music controls">
 
-            <!-- Plays or pauses the supplied song. -->
-            <button id="musicToggleButton" type="button">
+            <!-- JavaScript changes this button between play and pause. -->
+            <button
+                id="musicToggleButton"
+                type="button">
                 ▶ Play music
             </button>
 
-            <!-- Mutes or unmutes the supplied song. -->
-            <button id="muteToggleButton" type="button">
+            <!-- JavaScript changes this button between mute and unmute. -->
+            <button
+                id="muteToggleButton"
+                type="button">
                 🔊 Mute
             </button>
 
         </aside>
 
-        <!-- Replace song.mpeg.mp3 with a different filename if needed. -->
+
+        <!-- ===================================================
+             YOUR AUDIO FILE
+             IMPORTANT: Keep song.mpeg.mp3 beside index.html.
+             The ID connects this player to the JavaScript controls.
+             The loop attribute repeats the song.
+             =================================================== -->
+
         <audio
             id="backgroundMusic"
-            src="song.mpeg.mp3"
+            src="./song.mpeg.mp3"
             loop
             preload="metadata">
         </audio>
@@ -464,7 +542,7 @@
     </section>
 
 
-    <!-- Loads all interactive behaviours from the JavaScript file. -->
+    <!-- Loads the separate JavaScript file for buttons and animations. -->
     <script src="script.js"></script>
 
 </body>
