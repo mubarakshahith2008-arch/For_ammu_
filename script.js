@@ -1,3 +1,4 @@
+
 "use strict";
 
 /* ============================================================
@@ -6,11 +7,10 @@
    ============================================================ */
 
 /*
-   IMPORTANT:
-   Replace the text below with the custom password you choose.
-   Keep the quotation marks around your password.
+   Your website password is now 1234.
+   Enter 1234 on the password screen to unlock the website.
 */
-const SITE_PASSWORD = "vicky";
+const SITE_PASSWORD = "1234";
 
 /*
    Each filename points to a photo inside the images folder.
@@ -133,6 +133,7 @@ passwordForm.addEventListener("submit", (event) => {
     /*
        Refuses to unlock when the placeholder password is unchanged.
        This prevents an accidental unlock before you customise it.
+       Your current password is 1234, so this check won't block it.
     */
     if (SITE_PASSWORD === "CHANGE_ME_TO_YOUR_PASSWORD") {
 
