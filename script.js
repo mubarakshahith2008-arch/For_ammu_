@@ -10,7 +10,7 @@
    Replace the text below with the custom password you choose.
    Keep the quotation marks around your password.
 */
-const SITE_PASSWORD = "CHANGE_ME_TO_YOUR_PASSWORD";
+const SITE_PASSWORD = "vicky";
 
 /*
    Each filename points to a photo inside the images folder.
