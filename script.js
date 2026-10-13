@@ -1,1051 +1,259 @@
-"use strict";
 
-/* =========================================================
-PERSONAL SETTINGS
-========================================================= */
-
-const birthdayMessage = "WRITE YOUR PERSONAL BIRTHDAY MESSAGE HERE";
-
-// Change this password if you want.
-const unlockPassword = "AMMU";
-
-/* =========================================================
-HELPERS
-========================================================= */
-
-const $ = (selector, parent = document) =>
-parent.querySelector(selector);
-
-const $$ = (selector, parent = document) =>
-Array.from(parent.querySelectorAll(selector));
-
-const reducedMotion = window.matchMedia(
-"(prefers-reduced-motion: reduce)"
-).matches;
+const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => [...document.querySelectorAll(selector)];
 
 const scenes = $$(".scene");
-const progressBar = $("#progressBar");
-const heartsContainer = $("#hearts-container");
-const petalsContainer = $("#petals-container");
-const sparklesContainer = $("#sparkles-container");
 
-const birthdayMessageDisplay = $("#birthdayMessageDisplay");
+function showScene(id) {
+  const target = document.getElementById(id);
+  if (!target) return;
 
-let currentScene = 1;
-let previousFocusedElement = null;
-let typewriterStarted = false;
-let typewriterTimers = [];
-let finalSurpriseRevealed = false;
+  scenes.forEach(scene => scene.classList.remove("active"));
+  target.classList.add("active");
 
-/* =========================================================
-PASSWORD GATE
-========================================================= */
-
-const siteLock = $("#siteLock");
-const unlockForm = $("#unlockForm");
-const unlockPasswordInput = $("#unlockPassword");
-const lockError = $("#lockError");
-
-function unlockSite() {
-if (!siteLock || siteLock.hidden || siteLock.classList.contains("is-closing")) {
-return;
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-if (lockError) {
-lockError.textContent = "";
-}
-
-siteLock.classList.add("is-closing");
-
-const finishUnlock = () => {
-siteLock.hidden = true;
-siteLock.classList.remove("is-closing");
-document.body.style.overflow = "";
-
-showScene(1);  
-
-const firstButton = $('#scene1 [data-next="2"]');  
-if (firstButton) firstButton.focus();
-
-};
-
-if (reducedMotion) {
-finishUnlock();
-} else {
-window.setTimeout(finishUnlock, 450);
-}
-}
-
-if (siteLock && unlockForm && unlockPasswordInput) {
-  document.body.style.overflow = "hidden";
-
-  unlockForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    const enteredPassword = unlockPasswordInput.value.trim();
-
-    if (
-      enteredPassword.toUpperCase() !==
-      unlockPassword.toUpperCase()
-    ) {
-      if (lockError) {
-        lockError.textContent =
-          "Incorrect password. Try again, Ammu. ♡";
-      }
-
-      unlockPasswordInput.value = "";
-      unlockPasswordInput.focus();
-      return;
-    }
-
-    if (lockError) {
-      lockError.textContent = "";
-    }
-
-    unlockSite();
+$$("[data-next]").forEach(button => {
+  button.addEventListener("click", () => {
+    showScene(button.dataset.next);
   });
-}
+});
 
-/* =========================================================
-TYPEWRITER LOVE LETTER
-========================================================= */
+// Music: first tap starts the song; later taps mute or unmute it.
+const song = $("#song");
+const musicBtn = $("#musicBtn");
 
-function stopTypewriterTimers() {
-typewriterTimers.forEach((timer) => clearTimeout(timer));
-typewriterTimers = [];
-}
+musicBtn.addEventListener("click", async () => {
+  if (song.paused) {
+    try {
+      await song.play();
+      musicBtn.textContent = song.muted
+        ? "🔊 Unmute music"
+        : "🔇 Mute music";
+    } catch (error) {
+      musicBtn.textContent = "🎵 Tap to retry";
+    }
+  } else {
+    song.muted = !song.muted;
+    musicBtn.textContent = song.muted
+      ? "🔊 Unmute music"
+      : "🔇 Mute music";
+  }
+});
 
-function startTypewriter() {
-  if (typewriterStarted) return;
+song.addEventListener("play", () => {
+  musicBtn.textContent = song.muted
+    ? "🔊 Unmute music"
+    : "🔇 Mute music";
+});
 
-  const letterScene = $("#scene9");
+// Memory photo viewer.
+const photoDialog = $("#photoDialog");
+const largePhoto = $("#largePhoto");
+const photoCaption = $("#photoCaption");
 
-  if (!letterScene) return;
+$$(".photo-card").forEach(card => {
+  card.addEventListener("click", () => {
+    const image = card.querySelector("img");
+    largePhoto.src = image.src;
+    largePhoto.alt = image.alt;
+    photoCaption.textContent =
+      card.querySelector("span").textContent;
 
-  const paragraphs = $$(".typewriter-text", letterScene);
+    if (typeof photoDialog.showModal === "function") {
+      photoDialog.showModal();
+    } else {
+      window.open(image.src, "_blank", "noopener");
+    }
+  });
+});
 
-  if (!paragraphs.length) return;
+$("#closePhoto").addEventListener("click", () => {
+  photoDialog.close();
+});
 
-  typewriterStarted = true;
+photoDialog.addEventListener("click", event => {
+  if (event.target === photoDialog) {
+    photoDialog.close();
+  }
+});
 
-  if (reducedMotion) {
-    paragraphs.forEach((paragraph) => {
-      paragraph.textContent =
-        paragraph.dataset.fullText || paragraph.textContent;
+// Animated love letter.
+const letterText = $("#letterText");
+const originalLetter = letterText.textContent.trim();
+let letterStarted = false;
+let typingTimer;
 
-      paragraph.classList.remove("typing");
-    });
-
+$("#letterBtn").addEventListener("click", () => {
+  if (letterStarted) {
+    clearInterval(typingTimer);
+    letterText.textContent = originalLetter;
+    letterStarted = false;
+    $("#letterBtn").textContent = "Read my letter ✨";
     return;
   }
 
-  let paragraphIndex = 0;
+  letterStarted = true;
+  letterText.textContent = "";
+  $("#letterBtn").textContent = "Show full letter";
 
-  function typeParagraph() {
-    if (paragraphIndex >= paragraphs.length) return;
+  let position = 0;
 
-    if (!letterScene.classList.contains("active")) {
-      paragraphs.forEach((paragraph) => {
-        paragraph.textContent =
-          paragraph.dataset.fullText || paragraph.textContent;
+  typingTimer = setInterval(() => {
+    letterText.textContent += originalLetter[position];
+    position++;
 
-        paragraph.classList.remove("typing");
-      });
-
-      return;
+    if (position >= originalLetter.length) {
+      clearInterval(typingTimer);
+      $("#letterBtn").textContent = "Read again ↻";
+      letterStarted = false;
     }
-
-    const paragraph = paragraphs[paragraphIndex];
-
-    const fullText =
-      paragraph.dataset.fullText ||
-      paragraph.textContent.replace(/\s+/g, " ").trim();
-
-    paragraph.textContent = "";
-    paragraph.classList.add("typing");
-
-    let characterIndex = 0;
-
-    function typeNextCharacter() {
-      if (!letterScene.classList.contains("active")) {
-        paragraph.textContent = fullText;
-        paragraph.classList.remove("typing");
-        return;
-      }
-
-      if (characterIndex < fullText.length) {
-        paragraph.textContent += fullText.charAt(characterIndex);
-        characterIndex++;
-
-        const timer = window.setTimeout(typeNextCharacter, 20);
-        typewriterTimers.push(timer);
-      } else {
-        paragraph.classList.remove("typing");
-        paragraphIndex++;
-
-        const nextParagraphTimer = window.setTimeout(
-          typeParagraph,
-          350
-        );
-
-        typewriterTimers.push(nextParagraphTimer);
-      }
-    }
-
-    const startTimer = window.setTimeout(
-      typeNextCharacter,
-      paragraphIndex === 0 ? 450 : 0
-    );
-
-    typewriterTimers.push(startTimer);
-  }
-
-  typeParagraph();
-}
-
-function resetTypewriter() {
-stopTypewriterTimers();
-typewriterStarted = false;
-
-$$(".typewriter-text").forEach((paragraph) => {
-paragraph.classList.remove("typing");
-paragraph.textContent = paragraph.dataset.fullText ||
-paragraph.textContent;
-});
-}
-
-/* Store original letter text before any animation begins. */
-$$(".typewriter-text").forEach((paragraph) => {
-  paragraph.dataset.fullText =
-    paragraph.textContent.replace(/\s+/g, " ").trim();
+  }, 24);
 });
 
-/* =========================================
-   SCENE 9 — ENVELOPE AND LETTER CONTROLS
-========================================= */
+// Proposal response.
+$("#yesBtn").addEventListener("click", () => {
+  $("#proposalReply").textContent =
+    "You just made this little heart smile! ❤️";
 
-const openLoveLetterButton = $("#openLoveLetter");
-const loveEnvelopeWrap = $("#loveEnvelopeWrap");
-const loveLetterPaper = $("#loveLetterPaper");
-const envelopeHint = $("#envelopeHint");
-const letterNextButton = $("#letterNextButton");
+  burstHearts(18);
 
-let letterOpening = false;
+  setTimeout(() => showScene("birthday"), 1500);
+});
 
-function resetLetterScene() {
-  letterOpening = false;
+$("#noBtn").addEventListener("click", () => {
+  $("#proposalReply").textContent =
+    "Take your time, Ammu. Your happiness matters most. 💗";
+});
 
-  if (openLoveLetterButton) {
-    openLoveLetterButton.classList.remove("is-open");
-    openLoveLetterButton.disabled = false;
-    openLoveLetterButton.setAttribute("aria-expanded", "false");
+// Final surprise.
+$("#surpriseBtn").addEventListener("click", () => {
+  $("#surprise").hidden = false;
+  $("#surpriseBtn").textContent = "Surprise opened ❤️";
+  $("#surpriseBtn").disabled = true;
+  burstHearts(25);
+});
+
+// Heart button labelled ammu_143.
+let loveCount = 0;
+
+$("#heartBtn").addEventListener("click", () => {
+  loveCount++;
+
+  const heart = $("#heartBtn");
+  heart.classList.remove("liked");
+
+  // Restart the heart animation.
+  void heart.offsetWidth;
+  heart.classList.add("liked");
+  heart.textContent = "♥";
+
+  $("#heartLabel").textContent =
+    `ammu_143 ❤️ ${loveCount} ${loveCount === 1 ? "heart" : "hearts"}`;
+
+  burstHearts(5);
+});
+
+$("#brand").addEventListener("click", event => {
+  event.preventDefault();
+  showScene("welcome");
+});
+
+// Restart the experience.
+$("#restartBtn").addEventListener("click", () => {
+  clearInterval(typingTimer);
+
+  letterText.textContent = originalLetter;
+  letterStarted = false;
+  $("#letterBtn").textContent = "Read my letter ✨";
+
+  $("#proposalReply").textContent = "";
+  $("#surprise").hidden = true;
+  $("#surpriseBtn").disabled = false;
+  $("#surpriseBtn").textContent = "One last surprise 🎁";
+
+  showScene("welcome");
+});
+
+// Floating hearts.
+function burstHearts(amount = 10) {
+  const container = $("#hearts");
+
+  for (let i = 0; i < amount; i++) {
+    const heart = document.createElement("span");
+
+    heart.className = "floating-heart";
+    heart.textContent = ["♥", "♡", "💗", "✨"][
+      Math.floor(Math.random() * 4)
+    ];
+
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = 14 + Math.random() * 24 + "px";
+    heart.style.animationDuration = 3 + Math.random() * 4 + "s";
+
+    container.appendChild(heart);
+    heart.addEventListener("animationend", () => heart.remove());
   }
-
-  if (loveEnvelopeWrap) {
-    loveEnvelopeWrap.hidden = false;
-  }
-
-  if (envelopeHint) {
-    envelopeHint.textContent = "Tap the heart to open your letter ♡";
-  }
-
-  if (loveLetterPaper) {
-    loveLetterPaper.hidden = true;
-    loveLetterPaper.inert = true;
-    loveLetterPaper.setAttribute("aria-hidden", "true");
-    loveLetterPaper.classList.remove("is-opening", "is-writing");
-  }
-
-  if (letterNextButton) {
-    letterNextButton.hidden = true;
-  }
-
-  resetTypewriter();
 }
 
-if (openLoveLetterButton) {
-  openLoveLetterButton.addEventListener("click", () => {
-    if (letterOpening) return;
+setInterval(() => {
+  if (document.hidden) return;
 
-    letterOpening = true;
+  const heart = document.createElement("span");
+  heart.className = "floating-heart";
+  heart.textContent = Math.random() > 0.5 ? "♡" : "♥";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = 12 + Math.random() * 15 + "px";
+  heart.style.animationDuration = 6 + Math.random() * 5 + "s";
 
-    openLoveLetterButton.classList.add("is-open");
-    openLoveLetterButton.setAttribute("aria-expanded", "true");
-    openLoveLetterButton.disabled = true;
+  $("#hearts").appendChild(heart);
+  heart.addEventListener("animationend", () => heart.remove());
+}, 1200);
 
-    if (envelopeHint) {
-      envelopeHint.textContent = "A little message, just for you... ♡";
-    }
+// Twinkling star background.
+const canvas = $("#stars");
+const ctx = canvas.getContext("2d");
+let stars = [];
+let width = 0;
+let height = 0;
 
-    window.setTimeout(() => {
-      if (!loveLetterPaper || !loveEnvelopeWrap) return;
+function resizeCanvas() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-      loveEnvelopeWrap.hidden = true;
+  width = window.innerWidth;
+  height = window.innerHeight;
 
-      loveLetterPaper.hidden = false;
-      loveLetterPaper.inert = false;
-      loveLetterPaper.setAttribute("aria-hidden", "false");
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      loveLetterPaper.classList.remove("is-opening", "is-writing");
+  stars = Array.from({ length: Math.min(140, Math.floor(width / 5)) }, () => ({
+    x: Math.random() * width,
+    y: Math.random() * height,
+    radius: Math.random() * 1.7 + 0.3,
+    phase: Math.random() * Math.PI * 2,
+    speed: 0.01 + Math.random() * 0.025
+  }));
+}
 
-      void loveLetterPaper.offsetWidth;
+function drawStars() {
+  ctx.clearRect(0, 0, width, height);
 
-      loveLetterPaper.classList.add("is-opening");
+  stars.forEach(star => {
+    star.phase += star.speed;
 
-      window.setTimeout(() => {
-        loveLetterPaper.classList.add("is-writing");
+    const alpha = 0.35 + (Math.sin(star.phase) + 1) * 0.3;
 
-        startTypewriter();
-
-const paragraphs = $$(".typewriter-text", loveLetterPaper);
-
-const longestTypingDuration = paragraphs.reduce(
-  (longest, paragraph, paragraphIndex) => {
-    const fullText =
-      paragraph.dataset.fullText || paragraph.textContent;
-
-    const startDelay = 450 + paragraphIndex * 350;
-    const typingTime = fullText.length * 20;
-
-    return Math.max(
-      longest,
-      startDelay + typingTime
-    );
-  },
-  0
-);
-
-const typingDuration = reducedMotion
-  ? 100
-  : longestTypingDuration + 250;
-
-window.setTimeout(() => {
-  if (
-    letterNextButton &&
-    $("#scene9")?.classList.contains("active") &&
-    loveLetterPaper &&
-    !loveLetterPaper.hidden
-  ) {
-    letterNextButton.hidden = false;
-  }
-}, typingDuration);
-
-      }, reducedMotion ? 0 : 650);
-
-    }, reducedMotion ? 0 : 450);
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 222, 245, ${alpha})`;
+    ctx.fill();
   });
+
+  requestAnimationFrame(drawStars);
 }
 
-/* =========================================================  
-   SCENE NAVIGATION  
-========================================================= */  
-  
-function showScene(sceneNumber) {  
-  const index = Number(sceneNumber) - 1;  
-  
-  if (  
-    !Number.isInteger(index) ||  
-    index < 0 ||  
-    index >= scenes.length  
-  ) {  
-    return;  
-  }  
-  
-  currentScene = index + 1;  
-  
-  scenes.forEach((scene, sceneIndex) => {  
-    const isActive = sceneIndex === index;  
-  
-    scene.classList.toggle("active", isActive);  
-    scene.setAttribute("aria-hidden", String(!isActive));  
-  });  
-  
-  if (progressBar) {  
-    progressBar.style.width =  
-      `${((index + 1) / scenes.length) * 100}%`;  
-  }  
-  
-  if (birthdayMessageDisplay) {  
-    birthdayMessageDisplay.textContent = birthdayMessage;  
-  }  
-  
-if (index === 8) {
-  resetLetterScene();
-}
-  
-  if (index === 0) {  
-    resetFinalSurprise();  
-    resetCakeWish();  
-  }  
-  
-  window.scrollTo({  
-    top: 0,  
-    behavior: reducedMotion ? "auto" : "smooth"  
-  });  
-  
-  if (index === 9) {  
-    launchFireworks(1600);  
-  } else {  
-    stopFireworks();  
-  }  
-  
-  scenes[index].querySelectorAll("img[loading='lazy']").forEach((img) => {  
-    img.loading = "eager";  
-  });  
-}  
-  
-$$("[data-next]").forEach((button) => {  
-  button.addEventListener("click", () => {  
-    showScene(Number(button.dataset.next));  
-  });  
-});  
-  
-const restartButton = $("#restartButton");  
-  
-if (restartButton) {  
-  restartButton.addEventListener("click", () => {  
-    closePhotoViewer();  
-    resetFinalSurprise();  
-    resetCakeWish();  
-   resetLetterScene();
-   showScene(1);
-  });  
-}  
-  
-if (birthdayMessageDisplay) {  
-  birthdayMessageDisplay.textContent = birthdayMessage;  
-}  
-  
-/* =========================================================  
-   FLOATING DECORATIONS  
-========================================================= */  
-  
-function addFloatingItem(container, className, symbol, options = {}) {  
-  if (!container || reducedMotion) return;  
-  
-  const item = document.createElement("span");  
-  
-  item.className = className;  
-  item.textContent = symbol;  
-  item.setAttribute("aria-hidden", "true");  
-  item.style.left = `${Math.random() * 96}%`;  
-  
-  if (options.top) {  
-    item.style.top = `${Math.random() * 90}%`;  
-  }  
-  
-  const duration = options.duration || 8;  
-  
-  item.style.animationDuration = `${duration}s`;  
-  item.style.fontSize = `${options.size || 18}px`;  
-  
-  container.appendChild(item);  
-  
-  window.setTimeout(() => {  
-    item.remove();  
-  }, (duration + 1) * 1000);  
-}  
-  
-function createHeart() {  
-  addFloatingItem(  
-    heartsContainer,  
-    "floating-heart",  
-    Math.random() > 0.5 ? "♡" : "♥",  
-    {  
-      duration: 7 + Math.random() * 5,  
-      size: 12 + Math.random() * 20  
-    }  
-  );  
-}  
-  
-function createPetal() {  
-  const petals = ["❀", "✿", "❁", "♡"];  
-  
-  addFloatingItem(  
-    petalsContainer,  
-    "floating-petal",  
-    petals[Math.floor(Math.random() * petals.length)],  
-    {  
-      duration: 8 + Math.random() * 5,  
-      size: 12 + Math.random() * 13  
-    }  
-  );  
-}  
-  
-function createSparkle() {  
-  addFloatingItem(  
-    sparklesContainer,  
-    "floating-sparkle",  
-    Math.random() > 0.5 ? "✦" : "✧",  
-    {  
-      top: true,  
-      duration: 2 + Math.random() * 2,  
-      size: 10 + Math.random() * 12  
-    }  
-  );  
-}  
-  
-const isSmallScreen = window.matchMedia(  
-  "(max-width: 600px)"  
-).matches;  
-  
-if (!reducedMotion) {  
-  window.setInterval(() => {  
-    if (!document.hidden) createHeart();  
-  }, isSmallScreen ? 1600 : 1000);  
-  
-  window.setInterval(() => {  
-    if (!document.hidden) createPetal();  
-  }, isSmallScreen ? 2500 : 1700);  
-  
-  window.setInterval(() => {  
-    if (!document.hidden) createSparkle();  
-  }, isSmallScreen ? 1200 : 750);  
-}  
-  
-/* =========================================================  
-   MUSIC PLAYER + REACTIVE HEART  
-========================================================= */  
-  
-const birthdaySong = $("#birthdaySong");  
-const musicButton = $("#musicButton");  
-const musicLabel = $("#musicLabel");  
-  
-function updateMusicButton(isPlaying) {  
-  if (musicButton) {  
-    musicButton.classList.toggle("is-playing", isPlaying);  
-    musicButton.setAttribute("aria-pressed", String(isPlaying));  
-    musicButton.setAttribute(  
-      "aria-label",  
-      isPlaying ? "Pause birthday music" : "Play birthday music"  
-    );  
-  }  
-  
-  if (musicLabel) {  
-    musicLabel.textContent = isPlaying ? "Pause Music" : "Play Music";  
-  }  
-}  
-  
-if (birthdaySong && musicButton) {  
-  birthdaySong.addEventListener("play", () => {  
-    updateMusicButton(true);  
-  });  
-  
-  birthdaySong.addEventListener("pause", () => {  
-    updateMusicButton(false);  
-  });  
-  
-  birthdaySong.addEventListener("ended", () => {  
-    updateMusicButton(false);  
-  });  
-  
-  musicButton.addEventListener("click", async () => {  
-    if (birthdaySong.paused) {  
-      try {  
-        await birthdaySong.play();  
-      } catch (error) {  
-        updateMusicButton(false);  
-  
-        console.warn(  
-          "Music could not start. Check music/Song.mp3.",  
-          error  
-        );  
-      }  
-    } else {  
-      birthdaySong.pause();  
-    }  
-  });  
-  
-  birthdaySong.addEventListener("error", () => {  
-    updateMusicButton(false);  
-    console.warn("Music file not found. Check music/Song.mp3.");  
-  });  
-}  
-  
-/* =========================================================  
-   PHOTO VIEWER  
-========================================================= */  
-  
-const photoViewer = $("#photoViewer");  
-const expandedPhoto = $("#expandedPhoto");  
-const closePhotoViewerButton = $("#closePhotoViewer");  
-  
-function openPhotoViewer(image) {  
-  if (!photoViewer || !expandedPhoto || !image || !image.src) {  
-    return;  
-  }  
-  
-  previousFocusedElement = document.activeElement;  
-  
-  expandedPhoto.src = image.currentSrc || image.src;  
-  expandedPhoto.alt = image.alt || "Expanded memory";  
-  
-  photoViewer.classList.add("open");  
-  photoViewer.setAttribute("aria-hidden", "false");  
-  document.body.style.overflow = "hidden";  
-  
-  if (closePhotoViewerButton) {  
-    closePhotoViewerButton.focus();  
-  }  
-}  
-  
-function closePhotoViewer() {  
-  if (!photoViewer) return;  
-  
-  photoViewer.classList.remove("open");  
-  photoViewer.setAttribute("aria-hidden", "true");  
-  document.body.style.overflow = "";  
-  
-  if (expandedPhoto) {  
-    expandedPhoto.removeAttribute("src");  
-  }  
-  
-  if (  
-    previousFocusedElement &&  
-    typeof previousFocusedElement.focus === "function"  
-  ) {  
-    previousFocusedElement.focus();  
-  }  
-  
-  previousFocusedElement = null;  
-}  
-  
-$$(".memory-photo").forEach((image) => {  
-  image.addEventListener("click", () => {  
-    if (image.complete && image.naturalWidth > 0) {  
-      openPhotoViewer(image);  
-    } else {  
-      console.warn(  
-        `Photo is missing or could not load: ${image.src}`  
-      );  
-    }  
-  });  
-  
-  image.addEventListener("error", () => {  
-    console.warn(  
-      `Please check this photo path: ${image.getAttribute("src")}`  
-    );  
-  });  
-});  
-  
-if (closePhotoViewerButton) {  
-  closePhotoViewerButton.addEventListener(  
-    "click",  
-    closePhotoViewer  
-  );  
-}  
-  
-if (photoViewer) {  
-  photoViewer.addEventListener("click", (event) => {  
-    if (event.target === photoViewer) {  
-      closePhotoViewer();  
-    }  
-  });  
-}  
-  
-document.addEventListener("keydown", (event) => {  
-  if (  
-    event.key === "Escape" &&  
-    photoViewer?.classList.contains("open")  
-  ) {  
-    closePhotoViewer();  
-  }  
-});  
-  
-/* =========================================================  
-   FIREWORKS  
-========================================================= */  
-  
-const fireworksCanvas = $("#fireworksCanvas");  
-const fireworksButton = $("#fireworksButton");  
-  
-let fireworksContext = null;  
-let fireworksParticles = [];  
-let fireworksAnimationFrame = null;  
-let fireworksStopTimer = null;  
-let fireworksRunning = false;  
-let lastFireworkTime = 0;  
-let canvasWidth = 0;  
-let canvasHeight = 0;  
-let pixelRatio = 1;  
-  
-if (fireworksCanvas) {  
-  try {  
-    fireworksContext = fireworksCanvas.getContext("2d");  
-  } catch (error) {  
-    console.warn("Canvas effects are unavailable.", error);  
-  }  
-}  
-  
-function resizeFireworksCanvas() {  
-  if (!fireworksCanvas || !fireworksContext) return;  
-  
-  pixelRatio = Math.min(window.devicePixelRatio || 1, 2);  
-  canvasWidth = window.innerWidth;  
-  canvasHeight = window.innerHeight;  
-  
-  fireworksCanvas.width = Math.round(canvasWidth * pixelRatio);  
-  fireworksCanvas.height = Math.round(canvasHeight * pixelRatio);  
-  
-  fireworksCanvas.style.width = `${canvasWidth}px`;  
-  fireworksCanvas.style.height = `${canvasHeight}px`;  
-  
-  fireworksContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);  
-}  
-  
-window.addEventListener("resize", resizeFireworksCanvas);  
-resizeFireworksCanvas();  
-  
-function createFirework(x, y) {  
-  if (!fireworksContext) return;  
-  
-  const particleCount = 45;  
-  const hue = Math.floor(Math.random() * 360);  
-  
-  for (let i = 0; i < particleCount; i++) {  
-    const angle = (Math.PI * 2 * i) / particleCount;  
-    const speed = 1.5 + Math.random() * 4;  
-  
-    fireworksParticles.push({  
-      x,  
-      y,  
-      vx: Math.cos(angle) * speed,  
-      vy: Math.sin(angle) * speed,  
-      alpha: 1,  
-      decay: 0.012 + Math.random() * 0.014,  
-      radius: 1.3 + Math.random() * 2,  
-      hue: (hue + Math.random() * 40) % 360  
-    });  
-  }  
-}  
-  
-function drawFireworks(timestamp) {  
-  if (!fireworksContext || !fireworksCanvas) {  
-    stopFireworks();  
-    return;  
-  }  
-  
-  if (!fireworksRunning) return;  
-  
-  fireworksContext.clearRect(0, 0, canvasWidth, canvasHeight);  
-  
-  if (  
-    timestamp - lastFireworkTime > 350 &&  
-    fireworksParticles.length < 400  
-  ) {  
-    createFirework(  
-      canvasWidth * (0.15 + Math.random() * 0.7),  
-      canvasHeight * (0.15 + Math.random() * 0.45)  
-    );  
-  
-    lastFireworkTime = timestamp;  
-  }  
-  
-  const remainingParticles = [];  
-  
-  for (const particle of fireworksParticles) {  
-    particle.x += particle.vx;  
-    particle.y += particle.vy;  
-    particle.vy += 0.025;  
-    particle.vx *= 0.992;  
-    particle.vy *= 0.992;  
-    particle.alpha -= particle.decay;  
-  
-    if (particle.alpha <= 0) continue;  
-  
-    fireworksContext.globalAlpha = particle.alpha;  
-    fireworksContext.fillStyle =  
-      `hsl(${particle.hue} 90% 68%)`;  
-  
-    fireworksContext.beginPath();  
-    fireworksContext.arc(  
-      particle.x,  
-      particle.y,  
-      particle.radius,  
-      0,  
-      Math.PI * 2  
-    );  
-    fireworksContext.fill();  
-  
-    remainingParticles.push(particle);  
-  }  
-  
-  fireworksContext.globalAlpha = 1;  
-  fireworksParticles = remainingParticles;  
-  
-  fireworksAnimationFrame = requestAnimationFrame(drawFireworks);  
-}  
-  
-function launchFireworks(duration = 3000) {  
-  if (reducedMotion || !fireworksContext) return;  
-  
-  stopFireworks();  
-  
-  fireworksRunning = true;  
-  fireworksParticles = [];  
-  lastFireworkTime = 0;  
-  
-  createFirework(canvasWidth * 0.35, canvasHeight * 0.3);  
-  createFirework(canvasWidth * 0.65, canvasHeight * 0.25);  
-  
-  fireworksAnimationFrame = requestAnimationFrame(drawFireworks);  
-  
-  fireworksStopTimer = window.setTimeout(() => {  
-    stopFireworks();  
-  }, Math.max(500, duration));  
-}  
-  
-function stopFireworks() {  
-  fireworksRunning = false;  
-  
-  if (fireworksAnimationFrame !== null) {  
-    cancelAnimationFrame(fireworksAnimationFrame);  
-    fireworksAnimationFrame = null;  
-  }  
-  
-  if (fireworksStopTimer !== null) {  
-    clearTimeout(fireworksStopTimer);  
-    fireworksStopTimer = null;  
-  }  
-  
-  fireworksParticles = [];  
-  
-  if (fireworksContext && fireworksCanvas) {  
-    fireworksContext.clearRect(0, 0, canvasWidth, canvasHeight);  
-  }  
-}  
-  
-/* =========================================================  
-   CAKE WISH + FINAL SURPRISE  
-========================================================= */  
-  
-const birthdayCakeButton = $("#birthdayCakeButton");  
-const cakeWishMessage = $("#cakeWishMessage");  
-const finalSurprise = $("#finalSurprise");  
-const finalReplayButton = $("#finalReplayButton");  
-  
-function resetCakeWish() {  
-  if (cakeWishMessage) {  
-    cakeWishMessage.hidden = true;  
-  }  
-  
-  if (birthdayCakeButton) {  
-    birthdayCakeButton.classList.remove("cake-celebration");  
-  }  
-}  
-  
-if (birthdayCakeButton) {  
-  birthdayCakeButton.addEventListener("click", () => {  
-    if (cakeWishMessage) {  
-      cakeWishMessage.hidden = false;  
-    }  
-  
-    birthdayCakeButton.classList.remove("cake-celebration");  
-  
-    // Restart the bounce animation on every click.  
-    void birthdayCakeButton.offsetWidth;  
-  
-    birthdayCakeButton.classList.add("cake-celebration");  
-    launchFireworks(3500);  
-  });  
-}  
-  
-function revealFinalSurprise() {  
-  if (!finalSurprise) {  
-    launchFireworks(5000);  
-    return;  
-  }  
-  
-  finalSurprise.hidden = false;  
-  finalSurpriseRevealed = true;  
-  
-  launchFireworks(5000);  
-  
-  finalSurprise.scrollIntoView({  
-    behavior: reducedMotion ? "auto" : "smooth",  
-    block: "center"  
-  });  
-}  
-  
-function resetFinalSurprise() {  
-  if (finalSurprise) {  
-    finalSurprise.hidden = true;  
-  }  
-  
-  finalSurpriseRevealed = false;  
-}  
-  
-if (fireworksButton) {  
-  fireworksButton.addEventListener("click", () => {  
-    revealFinalSurprise();  
-  });  
-}  
-  
-if (finalReplayButton) {
-  finalReplayButton.addEventListener("click", () => {
-    closePhotoViewer();
-    resetFinalSurprise();
-    resetCakeWish();
-    resetLetterScene();
-    showScene(1);
-  });
-}
-  
-/* =========================================================  
-   PAGE VISIBILITY  
-========================================================= */  
-  
-document.addEventListener("visibilitychange", () => {  
-  if (document.hidden) {  
-    stopFireworks();  
-  }  
-});  
-  
-/* =========================================================  
-   INITIALIZE  
-========================================================= */  
-  
-showScene(1);  
-  
-/* =========================================================  
-   PROPOSAL YES / NO INTERACTION  
-========================================================= */  
-  
-const proposalCard = $(".proposal-card");  
-const proposalActions = $("#proposalActions");  
-const proposalYes = $("#proposalYes");  
-const proposalNo = $("#proposalNo");  
-const proposalSuccess = $("#proposalSuccess");  
-  
-let proposalNoAttempts = 0;  
-let proposalAccepted = false;  
-  
-function moveProposalNo() {  
-  if (  
-    !proposalActions ||  
-    !proposalNo ||  
-    !proposalYes ||  
-    proposalAccepted  
-  ) {  
-    return;  
-  }  
-  
-  const area = proposalActions.getBoundingClientRect();  
-  const button = proposalNo.getBoundingClientRect();  
-  
-  const maxX = Math.max(0, area.width - button.width);  
-  const maxY = Math.max(0, area.height - button.height);  
-  
-  let left = 0;  
-  let top = 0;  
-  
-  // Try different positions without changing button dimensions.  
-  const positions = [  
-    [0, 0],  
-    [maxX, 0],  
-    [0, maxY],  
-    [maxX, maxY],  
-    [maxX / 2, 0],  
-    [maxX / 2, maxY],  
-    [0, maxY / 2],  
-    [maxX, maxY / 2]  
-  ];  
-  
-  if (proposalNoAttempts < positions.length) {  
-    [left, top] = positions[proposalNoAttempts];  
-  } else {  
-    left = Math.random() * maxX;  
-    top = Math.random() * maxY;  
-  }  
-  
-  proposalNo.classList.add("is-dodging");  
-  proposalNo.style.left = `${left}px`;  
-  proposalNo.style.top = `${top}px`;  
-  
-  proposalNoAttempts++;  
-  
-const growth = Math.min(1 + proposalNoAttempts * 0.05, 1.35);  
-  
-  proposalYes.style.setProperty("--yes-scale", growth);  
-}  
-  
-if (proposalNo) {  
-  proposalNo.addEventListener("pointerenter", event => {  
-    if (event.pointerType === "mouse") {  
-      moveProposalNo();  
-    }  
-  });  
-  
-  proposalNo.addEventListener("click", event => {  
-    event.preventDefault();  
-    moveProposalNo();  
-  });  
-}  
-  
-if (proposalYes) {  
-  proposalYes.addEventListener("click", () => {  
-    if (proposalAccepted) return;  
-  
-    proposalAccepted = true;  
-  
-    if (proposalSuccess) {  
-      proposalSuccess.hidden = false;  
-    }  
-  
-    if (proposalNo) {  
-      proposalNo.disabled = true;  
-      proposalNo.hidden = true;  
-    }  
-  
-    proposalYes.textContent = "Yes! 💗";  
-    proposalYes.style.setProperty("--yes-scale", "1.2");  
-  
-    // Small heart particles only after Yes is clicked.  
-    if (!reducedMotion && proposalCard) {  
-      const hearts = ["💗", "♡", "💕", "✨"];  
-  
-      hearts.forEach((symbol, index) => {  
-        const heart = document.createElement("span");  
-  
-        heart.textContent = symbol;  
-        heart.setAttribute("aria-hidden", "true");  
-  
-        Object.assign(heart.style, {  
-          display: "inline-block",  
-          margin: "5px",  
-          fontSize: "1.4rem",  
-          animation: `heartBeat ${0.6 + index * 0.1}s ease-in-out 2`  
-        });  
-  
-        proposalSuccess?.appendChild(heart);  
-      });  
-    }  
-  });  
-}  
-  
-/* =========================================================
-   ANIMATED GIFT BOX
-========================================================= */
-
-const giftBoxButton = $("#giftBoxButton");
-
-if (giftBoxButton) {
-  giftBoxButton.addEventListener("click", () => {
-    const isOpen =
-      giftBoxButton.getAttribute("aria-expanded") === "true";
-
-    // Open the gift only once.
-    if (isOpen) return;
-
-    giftBoxButton.setAttribute("aria-expanded", "true");
-
-    const giftHint = giftBoxButton.querySelector(".gift-hint");
-
-    if (giftHint) {
-      giftHint.textContent = "Your surprise is here! 💗";
-    }
-
-    // Show the existing final birthday surprise.
-    revealFinalSurprise();
-  });
-}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+drawStars();
